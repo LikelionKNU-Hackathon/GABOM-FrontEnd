@@ -1,0 +1,11 @@
+p {
+  text-align: left;
+  font-weight: 60px;
+  font-size: 24px;
+}
+
+.LogoImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
