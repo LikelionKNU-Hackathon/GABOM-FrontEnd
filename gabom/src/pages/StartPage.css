@@ -1,11 +1,40 @@
+body {
+  font-family: "Pretendard", sans-serif;
+  background-color: #fafafa;
+}
 p {
+  position: relative;
+  top: 140px;
+  left: 40px;
   text-align: left;
-  font-weight: 60px;
   font-size: 24px;
+  line-height: 35px;
+}
+.StartPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: left;
 }
 
 .LogoImage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  bottom: 150px;
+  width: 180px;
+  height: 174px;
+}
+
+.button {
+  position: relative;
+  top: 150px;
+  width: 358px;
+  height: 60px;
+  font-size: 16px;
+  color: white;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #ffb1b4;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 0 6px rgba(0, 0, 0, 0.15);
 }
