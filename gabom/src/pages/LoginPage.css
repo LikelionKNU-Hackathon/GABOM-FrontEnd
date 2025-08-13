@@ -1,0 +1,92 @@
+body {
+  font-family: "pretendard", sans-serif;
+  background-color: #fafafa;
+}
+
+.LoginPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logintext {
+  margin: 50px 0 50px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.inputbox input {
+  width: 306px;
+  height: 16px;
+  font-size: 16px;
+  padding: 20px 24px;
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #868686;
+  font-size: 16px;
+}
+
+.login-options-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 9px 0 0 0;
+}
+
+.login-options {
+  display: flex;
+  margin-top: 3px;
+  gap: 9px;
+}
+
+.login-option {
+  text-decoration: none;
+  color: #868686;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* 버튼 스타일 */
+.LoginButton {
+  width: 358px;
+  height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #ffb1b4;
+  margin-top: 30px; /* top 대신 margin 사용 */
+}
+
+.KakaoLoginButton {
+  width: 358px;
+  height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #1e1e1e;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #fee500;
+  margin-top: 10px;
+}
+
+.SignupButton {
+  width: 358px;
+  height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffb1b4;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #ffe6e7;
+  box-shadow: 0 4px 3px rgba(0, 0, 0, 0.15), 0 0 6px rgba(0, 0, 0, 0.15);
+  margin-top: 40px;
+}

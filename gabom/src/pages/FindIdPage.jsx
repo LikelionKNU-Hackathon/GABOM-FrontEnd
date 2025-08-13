@@ -54,31 +54,29 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="LoginPageContainer">
-      <h2 className="logintext">로그인</h2>
+    <div>
+      <h2>로그인</h2>
       <form onSubmit={handleLogin}>
-        <div className="inputbox">
-          <div>
-            <input
-              type="text"
-              value={id}
-              placeholder="아이디"
-              onChange={(e) => setId(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              value={password}
-              placeholder="비밀번호"
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        <div className="idbox">
+          <input
+            type="text"
+            value={id}
+            placeholder="아이디"
+            onChange={(e) => setId(e.target.value)}
+            required
+          />
         </div>
-        <div className="login-options-container">
-          <label className="checkbox">
+        <div className="passwdbox">
+          <input
+            type="password"
+            value={password}
+            placeholder="비밀번호"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className="checkbox">
+          <label>
             <input
               type="checkbox"
               checked={saveId}
@@ -86,20 +84,20 @@ export default function LoginPage() {
             />
             아이디 저장
           </label>
-          <div className="login-options">
-            <Link to="/findid" className="login-option">
-              아이디찾기
-            </Link>
-            <Link to="/findpw" className="login-option">
-              비밀번호찾기
-            </Link>
-          </div>
         </div>
+        <div>
+          <Link to="/findid">
+            <p>아이디찾기</p>
+          </Link>
+          <Link to="/findpw">
+            <p>비밀번호찾기</p>
+          </Link>
+        </div>
+        <button className="LoginButton" type="submit">
+          로그인
+        </button>
       </form>
 
-      <button className="LoginButton" type="submit">
-        로그인
-      </button>
       <button className="KakaoLoginButton" onClick={handleKakaoLogin}>
         카카오 로그인
       </button>

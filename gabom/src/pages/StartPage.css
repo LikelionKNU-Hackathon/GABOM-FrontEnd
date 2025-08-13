@@ -3,35 +3,32 @@ body {
   background-color: #fafafa;
 }
 p {
-  position: relative;
-  top: 140px;
-  left: 40px;
   text-align: left;
   font-size: 24px;
   line-height: 35px;
+  margin-top: 150px;
+  margin-left: 30px;
+  margin-bottom: 30px;
 }
-.StartPageContainer {
+
+.content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  text-align: left;
+  gap: 180px;
 }
 
 .LogoImage {
-  position: relative;
-  bottom: 150px;
   width: 180px;
   height: 174px;
 }
 
-.button {
-  position: relative;
-  top: 150px;
+.StartButton {
   width: 358px;
   height: 60px;
   font-size: 16px;
+  font-weight: bold;
   color: white;
   border-radius: 10px;
   border-style: none;
