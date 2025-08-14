@@ -1,67 +1,82 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./FindPasswordPage.css";
 
 export default function LoginPage() {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [saveId, setSaveId] = useState(false);
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
 
-  useEffect(() => {
-    //카카오 sdk 스크립트 페이지 로드되어 있어야함.
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init("샘플키");
-    }
-  }, []);
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setMessage("");
-
+  const sendVerificationCode = async () => {
     try {
-      const response = await axios.post("", {
-        username: id,
-        password: password,
+      const res = await axios.post("/api/users/find-password", {
+        email: email, // 입력한 이메일
       });
-      if (response.data.success) {
-        setMessage("로그인 성공!"); // 로그인 성공 처리 (예: 토큰 저장, 페이지 이동 등)
+      if (res.data.success) {
+        alert("인증번호가 발송되었습니다.");
+        setCodeSent(true); // 인증번호 입력창 활성화
       } else {
-        setMessage("로그인 실패: " + response.data.message);
+        alert("이메일을 확인해주세요.");
       }
-    } catch (error) {
-      setMessage("로그인 중 오류가 발생했습니다.");
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      alert("인증번호 발송 중 오류가 발생했습니다.");
+    }
+  };
+
+  const verifyCode = async () => {
+    try {
+      const res = await axios.post("/api/users/verify-code", {
+        email: email,
+        code: verificationCode, // 사용자가 입력한 인증번호
+      });
+      if (res.data.verified) {
+        alert("인증이 완료되었습니다.");
+        navigate("/reset-password"); // 비밀번호 재설정 페이지로 이동
+      } else {
+        alert("인증번호가 올바르지 않습니다.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("인증 확인 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <div className="FindPasswordPageContainer">
       <h2 className="findpasswordtext">비밀번호 찾기</h2>
-      <form onSubmit={handleLogin}>
+      <form>
         <div className="findpasswordbox">
           <div>
             <p className="emailtext">이메일</p>
             <input
               type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <button type="button" onClick={sendVerificationCode}>
+              인증번호 전송
+            </button>
           </div>
         </div>
-        <div className="findpasswordbox">
-          <div>
+        {codeSent && (
+          <div className="findpasswordbox">
             <p className="numbertext">인증번호</p>
             <input
               type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
               required
             />
+            <button type="button" onClick={verifyCode}>
+              확인
+            </button>
           </div>
-        </div>
+        )}
 
         <Link to="/login">
           <button className="FindPasswordButton" type="submit">
@@ -69,8 +84,6 @@ export default function LoginPage() {
           </button>
         </Link>
       </form>
-
-      {message && <p>{message}</p>}
     </div>
   );
 }

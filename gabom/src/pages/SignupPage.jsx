@@ -5,11 +5,13 @@ import back from "../images/back.png";
 import eye from "../images/fluenteye.png";
 import "./SignupPage.css";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [saveId, setSaveId] = useState(false);
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const checkIdDuplicate = async () => {
     try {
@@ -61,8 +63,8 @@ export default function LoginPage() {
             <p className="text">이름</p>
             <input
               type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
@@ -76,7 +78,11 @@ export default function LoginPage() {
               onChange={(e) => setId(e.target.value)}
               required
             />
-            <button className="checkId" onClick={checkIdDuplicate}>
+            <button
+              type="button"
+              className="checkId"
+              onClick={checkIdDuplicate}
+            >
               중복확인
             </button>
           </div>
@@ -85,12 +91,17 @@ export default function LoginPage() {
           <div>
             <p className="text">비밀번호</p>
             <input
-              type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <img className="fluenteye" src={eye} alt="비밀번호보기" />
+            <img
+              className="fluenteye"
+              src={eye}
+              alt="비밀번호보기"
+              onClick={() => setShowPassword(!showPassword)}
+            />
           </div>
         </div>
         <div className="box">
@@ -98,8 +109,8 @@ export default function LoginPage() {
             <p className="text">이메일</p>
             <input
               type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -109,11 +120,15 @@ export default function LoginPage() {
             <p className="text">닉네임</p>
             <input
               type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
               required
             />
-            <button className="checknickname" onClick={checkNicknameDuplicate}>
+            <button
+              type="button"
+              className="checknickname"
+              onClick={checkNicknameDuplicate}
+            >
               중복확인
             </button>
           </div>
@@ -124,8 +139,6 @@ export default function LoginPage() {
           </button>
         </Link>
       </form>
-
-      {message && <p>{message}</p>}
     </div>
   );
 }

@@ -58,6 +58,7 @@ body {
   position: absolute;
   right: 30px;
   top: 317px;
+  cursor: pointer;
 }
 
 .checknickname {
@@ -81,5 +82,5 @@ body {
   border-radius: 10px;
   border-style: none;
   background-color: #ffb1b4;
-  margin-top: 70px;
+  margin-top: 190px;
 }
