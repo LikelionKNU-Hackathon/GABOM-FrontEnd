@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./LoginPage.css";
+import "./FindIdPage.css";
 
-export default function LoginPage() {
+export default function FindIdPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [saveId, setSaveId] = useState(false);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    //카카오 sdk 스크립트 페이지 로드되어 있어야함.
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init("샘플키");
-    }
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,76 +29,29 @@ export default function LoginPage() {
     }
   };
 
-  const handleKakaoLogin = () => {
-    if (!window.Kakao) {
-      alert("카카오 SDK가 로드되지 않았습니다.");
-      return;
-    }
-    window.Kakao.Auth.login({
-      success(authObj) {
-        console.log("카카오 로그인 성공", authObj);
-        setMessage("카카오 로그인 성공!");
-      },
-      fail(err) {
-        console.error(err);
-        setMessage("카카오 로그인 실패");
-      },
-    });
-  };
-
   return (
-    <div>
-      <h2>로그인</h2>
-      <form onSubmit={handleLogin}>
-        <div className="idbox">
-          <input
-            type="text"
-            value={id}
-            placeholder="아이디"
-            onChange={(e) => setId(e.target.value)}
-            required
-          />
-        </div>
-        <div className="passwdbox">
-          <input
-            type="password"
-            value={password}
-            placeholder="비밀번호"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="checkbox">
-          <label>
+    <div className="FindIdPageContainer">
+      <h2 className="findidtext">아이디찾기</h2>
+      <form>
+        <div className="findidbox">
+          <div>
+            <p className="emailtext">이메일</p>
             <input
-              type="checkbox"
-              checked={saveId}
-              onChange={(e) => setSaveId(e.target.checked)}
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              required
             />
-            아이디 저장
-          </label>
+          </div>
         </div>
-        <div>
-          <Link to="/findid">
-            <p>아이디찾기</p>
-          </Link>
-          <Link to="/findpw">
-            <p>비밀번호찾기</p>
-          </Link>
-        </div>
-        <button className="LoginButton" type="submit">
-          로그인
-        </button>
       </form>
-
-      <button className="KakaoLoginButton" onClick={handleKakaoLogin}>
-        카카오 로그인
-      </button>
+      <Link to="/login">
+        <button className="FindidButton" type="submit">
+          아이디 찾기
+        </button>
+      </Link>
 
       {message && <p>{message}</p>}
-      <Link to="/signup">
-        <button className="SignupButton">회원가입</button>
-      </Link>
     </div>
   );
 }

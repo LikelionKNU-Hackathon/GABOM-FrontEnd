@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./LoginPage.css";
+import "./FindPasswordPage.css";
 
 export default function LoginPage() {
   const [id, setId] = useState("");
@@ -36,76 +36,41 @@ export default function LoginPage() {
     }
   };
 
-  const handleKakaoLogin = () => {
-    if (!window.Kakao) {
-      alert("카카오 SDK가 로드되지 않았습니다.");
-      return;
-    }
-    window.Kakao.Auth.login({
-      success(authObj) {
-        console.log("카카오 로그인 성공", authObj);
-        setMessage("카카오 로그인 성공!");
-      },
-      fail(err) {
-        console.error(err);
-        setMessage("카카오 로그인 실패");
-      },
-    });
-  };
-
   return (
-    <div>
-      <h2>로그인</h2>
+    <div className="FindPasswordPageContainer">
+      <h2 className="findpasswordtext">비밀번호 찾기</h2>
       <form onSubmit={handleLogin}>
-        <div className="idbox">
-          <input
-            type="text"
-            value={id}
-            placeholder="아이디"
-            onChange={(e) => setId(e.target.value)}
-            required
-          />
-        </div>
-        <div className="passwdbox">
-          <input
-            type="password"
-            value={password}
-            placeholder="비밀번호"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="checkbox">
-          <label>
+        <div className="findpasswordbox">
+          <div>
+            <p className="emailtext">이메일</p>
             <input
-              type="checkbox"
-              checked={saveId}
-              onChange={(e) => setSaveId(e.target.checked)}
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              required
             />
-            아이디 저장
-          </label>
+          </div>
         </div>
-        <div>
-          <Link to="/findid">
-            <p>아이디찾기</p>
-          </Link>
-          <Link to="/findpw">
-            <p>비밀번호찾기</p>
-          </Link>
+        <div className="findpasswordbox">
+          <div>
+            <p className="numbertext">인증번호</p>
+            <input
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              required
+            />
+          </div>
         </div>
-        <button className="LoginButton" type="submit">
-          로그인
-        </button>
+
+        <Link to="/login">
+          <button className="FindPasswordButton" type="submit">
+            비밀번호 찾기
+          </button>
+        </Link>
       </form>
 
-      <button className="KakaoLoginButton" onClick={handleKakaoLogin}>
-        카카오 로그인
-      </button>
-
       {message && <p>{message}</p>}
-      <Link to="/signup">
-        <button className="SignupButton">회원가입</button>
-      </Link>
     </div>
   );
 }

@@ -1,0 +1,85 @@
+body {
+  font-family: "pretendard", sans-serif;
+  background-color: #fafafa;
+}
+
+.SignupPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signupheader {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.BackImage2 {
+  width: 12px;
+  height: 24px;
+  margin-top: 8px;
+}
+
+.signuptext {
+  margin: 30px 140px 23px 125px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.text {
+  margin: 7px 0 0 0;
+  font-size: 16px;
+}
+
+.box input {
+  width: 350px;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  margin: 2px 0 0 0;
+}
+
+.checkId {
+  position: absolute;
+  right: 30px;
+  top: 231px;
+  width: 50px;
+  height: 20px;
+  border-style: none;
+  font-size: 10px;
+  color: #868686;
+}
+
+.fluenteye {
+  position: absolute;
+  right: 30px;
+  top: 317px;
+}
+
+.checknickname {
+  position: absolute;
+  right: 30px;
+  top: 494px;
+  width: 50px;
+  height: 20px;
+  border-style: none;
+  font-size: 10px;
+  color: #868686;
+}
+
+/* 버튼 스타일 */
+.SignupButton2 {
+  width: 358px;
+  height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #ffb1b4;
+  margin-top: 70px;
+}

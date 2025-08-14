@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
+import back from "../images/back.png";
 
 export default function LoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [saveId, setSaveId] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
+  const handlestart = () => {
+    navigate("/");
+  };
   useEffect(() => {
     //카카오 sdk 스크립트 페이지 로드되어 있어야함.
     if (window.Kakao && !window.Kakao.isInitialized()) {
@@ -55,7 +60,15 @@ export default function LoginPage() {
 
   return (
     <div className="LoginPageContainer">
-      <h2 className="logintext">로그인</h2>
+      <div className="loginheader">
+        <img
+          className="BackImage1"
+          onClick={handlestart}
+          src={back}
+          alt="뒤로"
+        />
+        <h2 className="logintext">로그인</h2>
+      </div>
       <form onSubmit={handleLogin}>
         <div className="inputbox">
           <div>
@@ -106,7 +119,7 @@ export default function LoginPage() {
 
       {message && <p>{message}</p>}
       <Link to="/signup">
-        <button className="SignupButton">회원가입</button>
+        <button className="SignupButton1">회원가입</button>
       </Link>
     </div>
   );
