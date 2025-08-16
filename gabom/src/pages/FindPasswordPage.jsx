@@ -58,7 +58,11 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <button type="button" onClick={sendVerificationCode}>
+            <button
+              type="button"
+              onClick={sendVerificationCode}
+              className="sendbutton"
+            >
               인증번호 전송
             </button>
           </div>
@@ -72,12 +76,11 @@ export default function LoginPage() {
               onChange={(e) => setVerificationCode(e.target.value)}
               required
             />
-            <button type="button" onClick={verifyCode}>
+            <button type="button" onClick={verifyCode} className="check">
               확인
             </button>
           </div>
         )}
-
         <Link to="/login">
           <button className="FindPasswordButton" type="submit">
             비밀번호 찾기
