@@ -21,6 +21,15 @@ function MainPage() {
         });
 
         console.log("✅ 지도 객체 생성 완료:", map);
+
+        // ✅ 줌 컨트롤 UI 추가 (오른쪽에 버튼 표시)
+        const zoomControl = new window.kakao.maps.ZoomControl();
+        map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+
+        // ✅ 예시: 2초 후 부드럽게 확대
+        setTimeout(() => {
+          map.setLevel(map.getLevel() - 1, { animate: true });
+        }, 2000);
       } else {
         console.error("❌ mapRef 없음, div 확인 필요");
       }
