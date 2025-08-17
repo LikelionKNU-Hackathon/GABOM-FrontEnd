@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import "./MainPage.css";
 
 function MainPage() {
   const mapRef = useRef(null);
@@ -10,64 +11,45 @@ function MainPage() {
     }
 
     window.kakao.maps.load(() => {
-      console.log("✅ kakao.maps.load 실행됨");
-
-      if (mapRef.current) {
-        console.log("✅ mapRef 있음, 지도 생성 시도");
-
-        const map = new window.kakao.maps.Map(mapRef.current, {
-          center: new window.kakao.maps.LatLng(37.5665, 126.9780), // 서울시청
-          level: 3,
-        });
-
-        console.log("✅ 지도 객체 생성 완료:", map);
-      } else {
+      if (!mapRef.current) {
         console.error("❌ mapRef 없음, div 확인 필요");
+        return;
       }
+
+      const map = new window.kakao.maps.Map(mapRef.current, {
+        center: new window.kakao.maps.LatLng(37.5665, 126.978),
+        level: 3,
+      });
+
+      // (선택) 하단바에 가려지는 느낌 보정
+      try {
+        if (map.setPadding) map.setPadding(0, 0, 110, 0); // top, right, bottom, left
+      } catch (e) {
+        console.log("map.setPadding 미지원");
+      }
+
+      map.setLevel(map.getLevel() + 1, { animate: true });
+      console.log("✅ 지도 객체 생성 완료:", map);
     });
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      {/* 검색창 */}
-      <div style={{ padding: "10px", background: "#fff", zIndex: 2 }}>
-        <input
-          type="text"
-          placeholder="검색"
-          style={{
-            width: "100%",
-            padding: "8px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-          }}
-        />
+    <div className="main">
+      {/* 지도 (배경) */}
+      <div ref={mapRef} className="mapContainer" />
+
+      {/* 검색창 (오버레이) */}
+      <div className="searchBar">
+        <input type="text" placeholder="검색" className="searchInput" />
       </div>
 
-      {/* 지도 */}
-      <div
-        ref={mapRef}
-        style={{
-          flex: 1,
-          minHeight: "400px",
-          background: "#eee", // ✅ 디버깅용 배경
-        }}
-      />
-
-      {/* 하단 탭 */}
-      <div
-        style={{
-          height: "60px",
-          background: "pink",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <div>AI 채팅</div>
-        <div>스탬프</div>
-        <div>카메라</div>
-        <div>랭킹</div>
-        <div>마이페이지</div>
+      {/* 하단 탭 (오버레이) */}
+      <div className="bottomTab">
+        <div className="tabItem">AI 채팅</div>
+        <div className="tabItem">스탬프</div>
+        <div className="tabItem">카메라</div>
+        <div className="tabItem">랭킹</div>
+        <div className="tabItem">마이페이지</div>
       </div>
     </div>
   );

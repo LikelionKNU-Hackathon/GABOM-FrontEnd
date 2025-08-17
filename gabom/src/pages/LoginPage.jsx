@@ -14,12 +14,6 @@ export default function LoginPage() {
   const handlestart = () => {
     navigate("/");
   };
-  useEffect(() => {
-    //카카오 sdk 스크립트 페이지 로드되어 있어야함.
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init("샘플키");
-    }
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -39,23 +33,6 @@ export default function LoginPage() {
       setMessage("로그인 중 오류가 발생했습니다.");
       console.error(error);
     }
-  };
-
-  const handleKakaoLogin = () => {
-    if (!window.Kakao) {
-      alert("카카오 SDK가 로드되지 않았습니다.");
-      return;
-    }
-    window.Kakao.Auth.login({
-      success(authObj) {
-        console.log("카카오 로그인 성공", authObj);
-        setMessage("카카오 로그인 성공!");
-      },
-      fail(err) {
-        console.error(err);
-        setMessage("카카오 로그인 실패");
-      },
-    });
   };
 
   return (
@@ -78,6 +55,7 @@ export default function LoginPage() {
               placeholder="아이디"
               onChange={(e) => setId(e.target.value)}
               required
+              className="inputid"
             />
           </div>
           <div>
@@ -87,6 +65,7 @@ export default function LoginPage() {
               placeholder="비밀번호"
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="inputpw"
             />
           </div>
         </div>
@@ -114,9 +93,6 @@ export default function LoginPage() {
           로그인
         </button>
       </Link>
-      <button className="KakaoLoginButton" onClick={handleKakaoLogin}>
-        카카오 로그인
-      </button>
 
       {message && <p>{message}</p>}
       <Link to="/signup">

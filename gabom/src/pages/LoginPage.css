@@ -29,14 +29,23 @@ body {
   font-weight: bold;
 }
 
-.inputbox input {
-  width: 306px;
-  height: 16px;
+.inputid,
+.inputpw {
+  width: 355px;
+  height: 56px;
   font-size: 16px;
   padding: 20px 24px;
-  border-width: 1px;
-  border-radius: 6px;
   border: 1px solid #d9d9d9;
+}
+
+.inputid {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.inputpw {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 input[type="checkbox"] {
@@ -85,18 +94,6 @@ input[type="checkbox"] {
   border-style: none;
   background-color: #ffb1b4;
   margin-top: 30px; /* top 대신 margin 사용 */
-}
-
-.KakaoLoginButton {
-  width: 358px;
-  height: 60px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #1e1e1e;
-  border-radius: 10px;
-  border-style: none;
-  background-color: #fee500;
-  margin-top: 10px;
 }
 
 .SignupButton1 {
