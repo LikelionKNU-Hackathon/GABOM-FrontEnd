@@ -1,5 +1,12 @@
 import { useEffect, useRef } from "react";
 import "./MainPage.css";
+import search from "../images/search.png";
+import chat from "../images/chat.png";
+import passport from "../images/passport.png";
+import camera from "../images/camera.png";
+import rank from "../images/rank.png";
+import mypage from "../images/mypage.png";
+import { Link } from "react-router-dom";
 
 function MainPage() {
   const mapRef = useRef(null);
@@ -23,10 +30,6 @@ function MainPage() {
 
         console.log("✅ 지도 객체 생성 완료:", map);
 
-        // ✅ 줌 컨트롤 UI 추가 (오른쪽에 버튼 표시)
-        const zoomControl = new window.kakao.maps.ZoomControl();
-        map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
-
         // ✅ 예시: 2초 후 부드럽게 확대
         setTimeout(() => {
           map.setLevel(map.getLevel() - 1, { animate: true });
@@ -37,8 +40,8 @@ function MainPage() {
       }
 
       const map = new window.kakao.maps.Map(mapRef.current, {
-        center: new window.kakao.maps.LatLng(37.5665, 126.978),
-        level: 3,
+        center: new window.kakao.maps.LatLng(37.2717997, 127.127628),
+        level: 4,
       });
 
       // (선택) 하단바에 가려지는 느낌 보정
@@ -60,16 +63,42 @@ function MainPage() {
 
       {/* 검색창 (오버레이) */}
       <div className="searchBar">
+        <img className="SearchImage" src={search} alt="검색" />
         <input type="text" placeholder="검색" className="searchInput" />
       </div>
 
       {/* 하단 탭 (오버레이) */}
       <div className="bottomTab">
-        <div className="tabItem">AI 채팅</div>
-        <div className="tabItem">스탬프</div>
-        <div className="tabItem">카메라</div>
-        <div className="tabItem">랭킹</div>
-        <div className="tabItem">마이페이지</div>
+        <div className="tabItem">
+          <Link to="/aichat">
+            <img className="ChatImage" src={chat} alt="채팅" />
+            AI 채팅
+          </Link>
+        </div>
+        <div className="tabItem">
+          <Link to="/stamp">
+            <img className="StampImage" src={passport} alt="스탬프" />
+            스탬프
+          </Link>
+        </div>
+        <div className="tabItem">
+          <Link to="camera">
+            <img className="CameraImage" src={camera} alt="카메라" />
+            카메라
+          </Link>
+        </div>
+        <div className="tabItem">
+          <Link to="/rank">
+            <img className="RankImage" src={rank} alt="랭킹" />
+            랭킹
+          </Link>
+        </div>
+        <div className="tabItem">
+          <Link to="mypage">
+            <img className="MyPageImage" src={mypage} alt="마이페이지" />
+            마이페이지
+          </Link>
+        </div>
       </div>
     </div>
   );

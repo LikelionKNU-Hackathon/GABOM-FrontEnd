@@ -5,6 +5,11 @@ import SignupPage from "./pages/SignupPage";
 import FindIdPage from "./pages/FindIdPage";
 import FindPassWordPage from "./pages/FindPasswordPage";
 import MainPage from "./pages/MainPage";
+import AiChatPage from "./pages/AiChatPage";
+import StampPage from "./pages/StampPage";
+import CameraPage from "./pages/CameraPage";
+import RankPage from "./pages/RankPage";
+import MyPage from "./pages/MyPage";
 
 function App() {
   return (
@@ -16,6 +21,11 @@ function App() {
         <Route path="/findid" element={<FindIdPage />} />
         <Route path="/findpw" element={<FindPassWordPage />} />
         <Route path="/main" element={<MainPage />} />
+        <Route path="/aichat" element={<MainPage />} />
+        <Route path="/stamp" element={<MainPage />} />
+        <Route path="/camera" element={<MainPage />} />
+        <Route path="/rank" element={<MainPage />} />
+        <Route path="/mypage" element={<MainPage />} />
       </Routes>
     </Router>
   );

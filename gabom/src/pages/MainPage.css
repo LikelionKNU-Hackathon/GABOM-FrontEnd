@@ -36,17 +36,23 @@ body {
   position: absolute;
   left: 16px;
   right: 16px;
-  top: calc(var(--safe-top) + 8px);
-  height: 44px;
+  top: calc(var(--safe-top) + 38px);
+  height: 40px;
 
   display: flex;
   align-items: center;
   padding: 0 12px;
 
   background: #fff;
-  border-radius: 22px;
+  border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   z-index: 10; /* 지도가 뒤, 검색창이 위 */
+}
+
+.SearchImage {
+  margin-right: 5px;
+  width: 24px;
+  height: 24px;
 }
 
 .searchInput {
@@ -54,7 +60,7 @@ body {
   height: 100%;
   border: 0;
   outline: none;
-  font-size: 15px;
+  font-size: 16px;
   background: transparent;
 }
 
@@ -70,7 +76,7 @@ body {
   background: pink;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 -3px 16px rgba(0, 0, 0, 0.18);
 
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -79,7 +85,32 @@ body {
 }
 
 .tabItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
   text-align: center;
-  font-size: 14px;
+  font-size: 10px;
+  margin-bottom: 18px;
   user-select: none;
+}
+
+.tabItem img {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  width: 28px;
+  height: 28px;
+}
+
+a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
 }
