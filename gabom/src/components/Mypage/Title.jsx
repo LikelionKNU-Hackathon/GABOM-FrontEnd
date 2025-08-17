@@ -61,7 +61,7 @@ export default function Title() {
         ))}
       </div>
 
-      {/* 변경하기 버튼 (아래 고정) */}
+      {/* 변경하기 버튼 */}
       <button
         className={styles.saveBtn}
         onClick={handleSave}

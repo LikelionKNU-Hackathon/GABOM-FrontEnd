@@ -1,8 +1,6 @@
-// src/components/mypage/EditProfile.js
 import React, { useState } from "react";
 import styles from "./EditProfile.module.css";
 
-// 이미지 import
 import emoji1 from "../../assets/profile/emoji_1.png";
 import emoji2 from "../../assets/profile/emoji_2.png";
 import emoji3 from "../../assets/profile/emoji_3.png";
@@ -15,7 +13,6 @@ import emoji8 from "../../assets/profile/emoji_8.png";
 export default function EditProfile({ currentProfile, onSave, onClose }) {
   const profileOptions = [emoji1, emoji2, emoji3, emoji4, emoji5, emoji6, emoji7, emoji8];
 
-  // 선택 상태
   const [selectedProfile, setSelectedProfile] = useState(currentProfile);
 
   return (

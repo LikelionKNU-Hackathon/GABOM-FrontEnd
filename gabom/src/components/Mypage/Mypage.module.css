@@ -15,12 +15,12 @@
   display: flex;
   align-items: center;
   position: relative;
-  margin-bottom: 110px; /* 위로 50px 이동 */
+  margin-bottom: 110px; 
 }
 
 /* 뒤로가기 버튼 */
 .backBtn {
-  width: 20px; /* 요청한 사이즈 */
+  width: 20px; 
   height: 20px;
   cursor: pointer;
   position: absolute;
@@ -41,7 +41,7 @@
   width: 150px;
   height: 150px;
   margin-bottom: 20px;
-  transform: translateY(-50px); /* 전체 위로 이동 */
+  transform: translateY(-50px); 
 }
 
 .profileImage {
@@ -55,7 +55,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #FFE6E7; /* 요청한 배경색 */
+  background-color: #FFE6E7; 
   position: absolute;
   bottom: 0;
   right: 0;
@@ -117,7 +117,7 @@
   background-color: #ffffff; 
 }
 
-/* 로그아웃 버튼 (saveBtn 스타일 적용) */
+/* 로그아웃 버튼 */
 .logoutBtn {
   width: 358px;
   height: 60px;

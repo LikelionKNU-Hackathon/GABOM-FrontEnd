@@ -36,7 +36,7 @@
   width: 120px; 
   height: 120px;
   border-radius: 50%;
-  background-color: #ddd; /* 글씨 제거, 회색 원만 표시 */
+  background-color: #ddd; 
   display: block;
   margin: 30px auto 10px auto;
 }

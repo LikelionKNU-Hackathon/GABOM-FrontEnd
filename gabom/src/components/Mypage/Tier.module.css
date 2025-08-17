@@ -1,4 +1,4 @@
-/* 팝업 전체 배경 (반투명) */
+/* 팝업 전체 배경 */
 .overlay {
   position: fixed;
   top: 0;
@@ -52,8 +52,8 @@
   border-radius: 12px;
   display: flex;
   align-items: center;   
-  justify-content: center; /* 박스 전체 중앙 정렬 */
-  position: relative; /* 숫자 배치 위해 상대 위치 */
+  justify-content: center; 
+  position: relative; 
   margin-bottom: 10px;
   box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
   gap: 8px;
@@ -67,7 +67,7 @@
   gap: 8px;
   position: absolute;
   left: 50%;
-  transform: translateX(-50%); /* 정확히 가로 중앙 */
+  transform: translateX(-50%); 
 }
 
 /* 아이콘/이모지 */

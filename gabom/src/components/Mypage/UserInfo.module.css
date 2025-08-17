@@ -34,18 +34,18 @@
 .inputSet {
   display: flex;
   flex-direction: column;
-  margin-bottom: 8px; /* 이름~탈퇴까지 40px 총 간격 */
+  margin-bottom: 8px; 
 }
 
 .label {
   font-size: 16px;
   font-weight: 400;
-  margin-bottom: 5px; /* 라벨-인풋 간격 */
+  margin-bottom: 5px; 
 }
 
 .input {
   width: 358px;
-  height: 36px; /* 크기 조금 줄임 */
+  height: 36px; 
   border-radius: 12px;
   border: 1px solid #ccc;
   padding: 0 10px;
@@ -75,6 +75,6 @@
   background-color: #FFB1b4;
   color: white;
   display: block;
-  margin: 0 auto; /* 가운데 정렬 */
+  margin: 0 auto; 
   margin-top: 150px; 
 }
