@@ -94,7 +94,7 @@ function MainPage() {
           </Link>
         </div>
         <div className="tabItem">
-          <Link to="mypage">
+          <Link to="/Mypage">
             <img className="MyPageImage" src={mypage} alt="마이페이지" />
             마이페이지
           </Link>
