@@ -1,22 +1,76 @@
 import { useEffect, useRef } from "react";
 
-export default function KakaoMap() {
+function MainPage() {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    // 스크립트가 로드될 때까지 대기
-    const t = setInterval(() => {
-      if (window.kakao?.maps && mapRef.current) {
-        const { kakao } = window;
-        const map = new kakao.maps.Map(mapRef.current, {
-          center: new kakao.maps.LatLng(33.450701, 126.570667),
+    if (!window.kakao) {
+      console.error("⚠️ Kakao SDK 로드 안 됨");
+      return;
+    }
+
+    window.kakao.maps.load(() => {
+      console.log("✅ kakao.maps.load 실행됨");
+
+      if (mapRef.current) {
+        console.log("✅ mapRef 있음, 지도 생성 시도");
+
+        const map = new window.kakao.maps.Map(mapRef.current, {
+          center: new window.kakao.maps.LatLng(37.5665, 126.9780), // 서울시청
           level: 3,
         });
-        clearInterval(t);
+
+        console.log("✅ 지도 객체 생성 완료:", map);
+      } else {
+        console.error("❌ mapRef 없음, div 확인 필요");
       }
-    }, 50);
-    return () => clearInterval(t);
+    });
   }, []);
 
-  return <div ref={mapRef} style={{ width: "100%", height: 350 }} />;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* 검색창 */}
+      <div style={{ padding: "10px", background: "#fff", zIndex: 2 }}>
+        <input
+          type="text"
+          placeholder="검색"
+          style={{
+            width: "100%",
+            padding: "8px",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+          }}
+        />
+      </div>
+
+      {/* 지도 */}
+      <div
+        ref={mapRef}
+        style={{
+          flex: 1,
+          minHeight: "400px",
+          background: "#eee", // ✅ 디버깅용 배경
+        }}
+      />
+
+      {/* 하단 탭 */}
+      <div
+        style={{
+          height: "60px",
+          background: "pink",
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <div>AI 채팅</div>
+        <div>스탬프</div>
+        <div>카메라</div>
+        <div>랭킹</div>
+        <div>마이페이지</div>
+      </div>
+    </div>
+  );
 }
+
+export default MainPage;
