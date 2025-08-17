@@ -11,7 +11,27 @@ function MainPage() {
     }
 
     window.kakao.maps.load(() => {
-      if (!mapRef.current) {
+      console.log("✅ kakao.maps.load 실행됨");
+
+      if (mapRef.current) {
+        console.log("✅ mapRef 있음, 지도 생성 시도");
+
+        const map = new window.kakao.maps.Map(mapRef.current, {
+          center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울시청
+          level: 3,
+        });
+
+        console.log("✅ 지도 객체 생성 완료:", map);
+
+        // ✅ 줌 컨트롤 UI 추가 (오른쪽에 버튼 표시)
+        const zoomControl = new window.kakao.maps.ZoomControl();
+        map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+
+        // ✅ 예시: 2초 후 부드럽게 확대
+        setTimeout(() => {
+          map.setLevel(map.getLevel() - 1, { animate: true });
+        }, 2000);
+      } else {
         console.error("❌ mapRef 없음, div 확인 필요");
         return;
       }
