@@ -109,7 +109,7 @@ export default function LoginPage() {
           </div>
         </div>
       </form>
-      <Link to="/">
+      <Link to="/main">
         <button className="LoginButton" type="submit">
           로그인
         </button>
