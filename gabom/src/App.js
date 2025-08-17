@@ -10,12 +10,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/start" element={<StartPage />} />
+        <Route path="/" element={<StartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/findid" element={<FindIdPage />} />
         <Route path="/findpw" element={<FindPassWordPage />} />
-        <Route path="/" element={<MainPage />} />
+        <Route path="/main" element={<MainPage />} />
       </Routes>
     </Router>
   );
