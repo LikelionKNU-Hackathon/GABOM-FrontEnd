@@ -109,10 +109,11 @@ export default function LoginPage() {
           </div>
         </div>
       </form>
-
-      <button className="LoginButton" type="submit">
-        로그인
-      </button>
+      <Link to="/">
+        <button className="LoginButton" type="submit">
+          로그인
+        </button>
+      </Link>
       <button className="KakaoLoginButton" onClick={handleKakaoLogin}>
         카카오 로그인
       </button>

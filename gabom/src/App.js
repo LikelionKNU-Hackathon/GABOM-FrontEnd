@@ -4,16 +4,18 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import FindIdPage from "./pages/FindIdPage";
 import FindPassWordPage from "./pages/FindPasswordPage";
+import MainPage from "./pages/MainPage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<StartPage />} />
+        <Route path="/start" element={<StartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/findid" element={<FindIdPage />} />
         <Route path="/findpw" element={<FindPassWordPage />} />
+        <Route path="/" element={<MainPage />} />
       </Routes>
     </Router>
   );
