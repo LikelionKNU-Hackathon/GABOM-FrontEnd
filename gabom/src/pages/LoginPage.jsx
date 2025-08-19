@@ -9,29 +9,54 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [saveId, setSaveId] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handlestart = () => {
-    navigate("/");
-  };
+  // 뒤로가기(시작 화면)
+  const handlestart = () => navigate("/");
 
+  // 처음 로드 시 저장된 아이디 불러오기
+  useEffect(() => {
+    const saved = localStorage.getItem("savedId");
+    if (saved) {
+      setId(saved);
+      setSaveId(true);
+    }
+  }, []);
+
+  // 체크박스/아이디 변경 시 로컬스토리지 동기화
+  useEffect(() => {
+    if (saveId) localStorage.setItem("savedId", id);
+    else localStorage.removeItem("savedId");
+  }, [saveId, id]);
+
+  // 로그인 처리
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setMessage("");
+    setLoading(true);
 
     try {
-      const response = await axios.post("", {
-        username: id,
-        password: password,
-      });
-      if (response.data.success) {
-        setMessage("로그인 성공!"); // 로그인 성공 처리 (예: 토큰 저장, 페이지 이동 등)
+      const res = await axios.post(
+        "/api/user/login", // 필요 시 경로 조정
+        { username: id, password },
+        { withCredentials: true } // 세션/쿠키 쓰면 유지
+      );
+
+      if (res.data?.success) {
+        setMessage("로그인 성공!");
+        navigate("/main"); // ✅ 성공 시에만 이동
       } else {
-        setMessage("로그인 실패: " + response.data.message);
+        setMessage(
+          `로그인 실패: ${res.data?.message ?? "아이디/비밀번호를 확인하세요."}`
+        );
       }
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       setMessage("로그인 중 오류가 발생했습니다.");
-      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,6 +71,8 @@ export default function LoginPage() {
         />
         <h2 className="logintext">로그인</h2>
       </div>
+
+      {/* 폼 제출로만 로그인 실행 */}
       <form onSubmit={handleLogin}>
         <div className="inputbox">
           <div>
@@ -56,6 +83,7 @@ export default function LoginPage() {
               onChange={(e) => setId(e.target.value)}
               required
               className="inputid"
+              autoComplete="username"
             />
           </div>
           <div>
@@ -66,9 +94,11 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="inputpw"
+              autoComplete="current-password"
             />
           </div>
         </div>
+
         <div className="login-options-container">
           <label className="checkbox">
             <input
@@ -87,14 +117,15 @@ export default function LoginPage() {
             </Link>
           </div>
         </div>
-      </form>
-      <Link to="/main">
-        <button className="LoginButton" type="submit">
-          로그인
+
+        {/* ✅ 링크 없이 submit 버튼만 사용 */}
+        <button className="LoginButton" type="submit" disabled={loading}>
+          {loading ? "로그인 중..." : "로그인"}
         </button>
-      </Link>
+      </form>
 
       {message && <p>{message}</p>}
+
       <Link to="/signup">
         <button className="SignupButton1">회원가입</button>
       </Link>
