@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   const verifyCode = async () => {
     try {
-      const res = await axios.post("/api/users/verify-code", {
+      const res = await axios.post("localhost:8080/api/users/verify-code", {
         email: email,
         code: verificationCode, // 사용자가 입력한 인증번호
       });

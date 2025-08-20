@@ -82,7 +82,7 @@ function MainPage() {
           </Link>
         </div>
         <div className="tabItem">
-          <Link to="camera">
+          <Link to="/camera">
             <img className="CameraImage" src={camera} alt="카메라" />
             카메라
           </Link>
