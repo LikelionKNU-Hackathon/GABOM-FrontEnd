@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+// src/pages/MainPage.jsx
+import { useEffect, useRef, useState } from "react";
 import "./MainPage.css";
 import search from "../images/search.png";
 import chat from "../images/chat.png";
@@ -7,9 +8,16 @@ import camera from "../images/camera.png";
 import rank from "../images/rank.png";
 import mypage from "../images/mypage.png";
 import { Link } from "react-router-dom";
+import BottomSheet from "./BottomSheet";
 
 function MainPage() {
   const mapRef = useRef(null);
+  const [keyword, setKeyword] = useState("");
+  const [results, setResults] = useState([]);
+  const [selectedStore, setSelectedStore] = useState(null);
+
+  // ✅ 개발 모드 스위치 (true = mock, false = 백엔드 API)
+  const useMock = true;
 
   useEffect(() => {
     if (!window.kakao) {
@@ -18,56 +26,99 @@ function MainPage() {
     }
 
     window.kakao.maps.load(() => {
-      console.log("✅ kakao.maps.load 실행됨");
-
       if (mapRef.current) {
-        console.log("✅ mapRef 있음, 지도 생성 시도");
-
         const map = new window.kakao.maps.Map(mapRef.current, {
-          center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울시청
-          level: 3,
+          center: new window.kakao.maps.LatLng(37.2717997, 127.127628),
+          level: 4,
         });
 
-        console.log("✅ 지도 객체 생성 완료:", map);
-
-        // ✅ 예시: 2초 후 부드럽게 확대
-        setTimeout(() => {
-          map.setLevel(map.getLevel() - 1, { animate: true });
-        }, 2000);
-      } else {
-        console.error("❌ mapRef 없음, div 확인 필요");
-        return;
+        try {
+          if (map.setPadding) map.setPadding(0, 0, 110, 0);
+        } catch (e) {
+          console.log("map.setPadding 미지원");
+        }
       }
-
-      const map = new window.kakao.maps.Map(mapRef.current, {
-        center: new window.kakao.maps.LatLng(37.2717997, 127.127628),
-        level: 4,
-      });
-
-      // (선택) 하단바에 가려지는 느낌 보정
-      try {
-        if (map.setPadding) map.setPadding(0, 0, 110, 0); // top, right, bottom, left
-      } catch (e) {
-        console.log("map.setPadding 미지원");
-      }
-
-      map.setLevel(map.getLevel() + 1, { animate: true });
-      console.log("✅ 지도 객체 생성 완료:", map);
     });
   }, []);
 
+  // 🔎 검색 요청
+  const handleSearch = async (e) => {
+    if (e.key === "Enter" && keyword.trim() !== "") {
+      if (useMock) {
+        // ✅ Mock 데이터
+        const mock = [
+          {
+            id: 1,
+            name: "The 진분식",
+            category: "분식",
+            openingHours: "10:00 ~ 18:00",
+            address: "경기 용인시 기흥구 동백죽전대로527번길 100-3",
+          },
+          {
+            id: 2,
+            name: "틈새라면",
+            category: "라면",
+            openingHours: "11:00 ~ 21:00",
+            address: "서울 강남구 어딘가 123",
+          },
+        ];
+        setResults(mock);
+      } else {
+        // ✅ 실제 API 연결
+        try {
+          const res = await fetch(`/api/stores/search?keyword=${keyword}`);
+          const data = await res.json();
+          setResults(data);
+        } catch (err) {
+          console.error("검색 실패:", err);
+        }
+      }
+    }
+  };
+
   return (
     <div className="main">
-      {/* 지도 (배경) */}
+      {/* 지도 */}
       <div ref={mapRef} className="mapContainer" />
 
-      {/* 검색창 (오버레이) */}
+      {/* 검색창 */}
       <div className="searchBar">
         <img className="SearchImage" src={search} alt="검색" />
-        <input type="text" placeholder="검색" className="searchInput" />
+        <input
+          id="searchInput" // ✅ 추가
+          type="text"
+          placeholder="검색"
+          className="searchInput"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={handleSearch}
+        />
       </div>
 
-      {/* 하단 탭 (오버레이) */}
+      {/* 검색 결과 리스트 */}
+      {results.length > 0 && (
+        <div className="searchResults">
+          {results.map((store) => (
+            <div
+              key={store.id}
+              className="searchResultItem"
+              onClick={() => setSelectedStore(store)}
+            >
+              <h3>{store.name}</h3>
+              <p>{store.category}</p>
+              <p>{store.address}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 상세보기 바텀시트 */}
+      <BottomSheet
+        store={selectedStore}
+        onClose={() => setSelectedStore(null)}
+      />
+
+      {/* 하단 탭 */}
       <div className="bottomTab">
         <div className="tabItem">
           <Link to="/aichat">
