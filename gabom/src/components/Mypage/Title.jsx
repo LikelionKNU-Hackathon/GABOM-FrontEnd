@@ -7,7 +7,7 @@ export default function Title() {
   const navigate = useNavigate();
   const [selectedTitle, setSelectedTitle] = useState("");
 
-  const titles = ["칭호 모으는 중"]; // 현재는 1개만 표시
+  const titles = ["칭호 모으는 중"]; 
 
   useEffect(() => {
     const savedTitle = localStorage.getItem("selectedTitle");
@@ -38,7 +38,7 @@ export default function Title() {
         <h1 className={styles.title}>칭호</h1>
       </div>
 
-      {/* 칭호목록 글자만 */}
+      {/* 칭호목록 버튼 */}
       <div
         className={styles.titleListButton}
         onClick={() => navigate("/titlelist")}
@@ -46,7 +46,7 @@ export default function Title() {
         칭호목록
       </div>
 
-      {/* 칭호 목록 */}
+      {/* 칭호 카드 목록 */}
       <div className={styles.titleList}>
         {titles.map((t, idx) => (
           <button

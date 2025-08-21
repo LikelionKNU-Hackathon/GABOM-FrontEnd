@@ -1,0 +1,99 @@
+.caseBoxContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 80px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  position: relative;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* 케이스 리스트 영역 */
+.caseList {
+  flex: 1; 
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  width: 100%;
+  margin-top: 1vh;
+  padding-left: 40px; 
+}
+
+/* 컬렉션 이름 */
+.collectionName {
+  font-size: 1.8vh;
+  margin: 0.5vh 0;
+}
+
+
+.imagesRow {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 1vh;
+}
+
+
+.caseImage {
+  width: 25vw;
+  aspect-ratio: 106 / 150; 
+  flex-shrink: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+}
+
+.selected {
+  transform: translateY(-5%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* 하단 버튼 */
+.changeBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  height: 7vh;
+  border-radius: 12px;
+  border: none;
+  background-color: #FFB1b4;
+  color: white;
+  font-size: 2vh;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* 반응형 */
+@media (max-width: 400px) {
+  .caseImage {
+    width: 35vw;
+    aspect-ratio: 106 / 150;
+  }
+  .changeBtn {
+    width: calc(100% - 30px);
+    height: 8vw;
+  }
+}
+

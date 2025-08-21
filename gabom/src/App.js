@@ -7,7 +7,9 @@ import FindIdPage from "./pages/FindIdPage";
 import FindPassWordPage from "./pages/FindPasswordPage";
 import MainPage from "./pages/MainPage";
 import AiChatPage from "./pages/AiChatPage";
-import StampPage from "./pages/StampPage";
+import StampPage from "./components/PassPort/PassPort";
+import CaseBox from "./components/PassPort/CaseBox"
+import Stamp from "./components/PassPort/Stamp"
 import CameraPage from "./pages/CameraPage";
 import RankPage from "./pages/RankPage";
 
@@ -25,9 +27,11 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/findid" element={<FindIdPage />} />
         <Route path="/findpw" element={<FindPassWordPage />} />
-        <Route path="/main" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/aichat" element={<AiChatPage />} />
-        <Route path="/stamp" element={<StampPage />} />
+        <Route path="/PassPort" element={<StampPage />} />
+        <Route path="/CaseBox" element={<CaseBox />} />
+        <Route path="/Stamp" element={<Stamp />} />
         <Route path="/camera" element={<CameraPage />} />
         <Route path="/rank" element={<RankPage />} />
         {/* 마이페이지 관련 */}
