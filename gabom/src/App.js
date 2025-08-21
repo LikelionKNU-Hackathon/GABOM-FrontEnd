@@ -8,8 +8,8 @@ import FindPassWordPage from "./pages/FindPasswordPage";
 import MainPage from "./pages/MainPage";
 import AiChatPage from "./pages/AiChatPage";
 import StampPage from "./components/PassPort/PassPort";
-import CaseBox from "./components/PassPort/CaseBox"
-import Stamp from "./components/PassPort/Stamp"
+import CaseBox from "./components/PassPort/CaseBox";
+import Stamp from "./components/PassPort/Stamp";
 import CameraPage from "./pages/CameraPage";
 import RankPage from "./pages/RankPage";
 
@@ -27,7 +27,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/findid" element={<FindIdPage />} />
         <Route path="/findpw" element={<FindPassWordPage />} />
-        <Route path="/" element={<MainPage />} />
+        <Route path="/main" element={<MainPage />} />
         <Route path="/aichat" element={<AiChatPage />} />
         <Route path="/PassPort" element={<StampPage />} />
         <Route path="/CaseBox" element={<CaseBox />} />
