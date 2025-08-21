@@ -7,16 +7,17 @@ import passport from "../images/passport.png";
 import camera from "../images/camera.png";
 import rank from "../images/rank.png";
 import mypage from "../images/mypage.png";
+import markerIcon from "../images/pinbig.png"; // ✅ 우리 마커 이미지
 import { Link } from "react-router-dom";
 import BottomSheet from "./BottomSheet";
 
 function MainPage() {
   const mapRef = useRef(null);
+  const [map, setMap] = useState(null);
   const [keyword, setKeyword] = useState("");
-  const [results, setResults] = useState([]);
   const [selectedStore, setSelectedStore] = useState(null);
+  const markersRef = useRef([]);
 
-  // ✅ 개발 모드 스위치 (true = mock, false = 실제 API)
   const useMock = true;
 
   useEffect(() => {
@@ -27,60 +28,101 @@ function MainPage() {
 
     window.kakao.maps.load(() => {
       if (mapRef.current) {
-        const map = new window.kakao.maps.Map(mapRef.current, {
+        const mapInstance = new window.kakao.maps.Map(mapRef.current, {
           center: new window.kakao.maps.LatLng(37.2717997, 127.127628),
           level: 4,
         });
 
         try {
-          if (map.setPadding) map.setPadding(0, 0, 110, 0);
+          if (mapInstance.setPadding) mapInstance.setPadding(0, 0, 110, 0);
         } catch (e) {
           console.log("map.setPadding 미지원");
         }
+
+        setMap(mapInstance);
       }
     });
   }, []);
 
-  // 🔎 검색 요청
   const handleSearch = async (e) => {
     if (e.key === "Enter" && keyword.trim() !== "") {
+      let results = [];
       if (useMock) {
-        // ✅ Mock 데이터
         const mock = [
           {
             id: 1,
+            name: "틈새라면 강남점",
+            category: "라면",
+            openingHours: "11:00 ~ 21:00",
+            address: "서울 강남구 어딘가 123",
+            latitude: 37.498,
+            longitude: 127.028,
+            topVisitor: { nickname: "철수", visitCount: 5 },
+            myVisit: { nickname: "길동이", visitCount: 2 },
+          },
+          {
+            id: 2,
             name: "The 진분식",
             category: "분식",
             openingHours: "10:00 ~ 18:00",
             address: "경기 용인시 기흥구 동백죽전대로527번길 100-3",
-          },
-          {
-            id: 2,
-            name: "틈새라면",
-            category: "라면",
-            openingHours: "11:00 ~ 21:00",
-            address: "서울 강남구 어딘가 123",
+            latitude: 37.2718,
+            longitude: 127.1276,
+            topVisitor: { nickname: "영희", visitCount: 3 },
+            myVisit: { nickname: "길동이", visitCount: 1 },
           },
         ];
 
-        // ✅ 키워드 필터링
-        const filtered = mock.filter(
+        results = mock.filter(
           (s) =>
             s.name.includes(keyword) ||
             s.category.includes(keyword) ||
             s.address.includes(keyword)
         );
-
-        setResults(filtered);
       } else {
-        // ✅ 실제 API 연동
         try {
           const res = await fetch(`/api/stores/search?keyword=${keyword}`);
-          const data = await res.json();
-          setResults(data);
+          results = await res.json();
         } catch (err) {
           console.error("검색 실패:", err);
         }
+      }
+
+      if (results.length > 0) {
+        const store = results[0];
+        setSelectedStore(store);
+
+        if (map) {
+          // 이전 마커 제거
+          markersRef.current.forEach((m) => m.setMap(null));
+          markersRef.current = [];
+
+          // ✅ 커스텀 마커 이미지 생성
+          const markerImage = new window.kakao.maps.MarkerImage(
+            markerIcon,
+            new window.kakao.maps.Size(34, 53), // 마커 크기
+            { offset: new window.kakao.maps.Point(20, 40) } // 기준점 (아래쪽이 좌표 찍히는 위치)
+          );
+
+          const marker = new window.kakao.maps.Marker({
+            map,
+            position: new window.kakao.maps.LatLng(
+              store.latitude,
+              store.longitude
+            ),
+            image: markerImage, // ✅ 우리 마커 이미지 적용
+          });
+
+          markersRef.current.push(marker);
+
+          // 지도 이동
+          map.setCenter(
+            new window.kakao.maps.LatLng(store.latitude, store.longitude)
+          );
+        }
+      } else {
+        alert("검색 결과 없음");
+        setSelectedStore(null);
       }
     }
   };
@@ -105,28 +147,13 @@ function MainPage() {
         />
       </div>
 
-      {/* 검색 결과 리스트 */}
-      {results.length > 0 && (
-        <div className="searchResults">
-          {results.map((store) => (
-            <div
-              key={store.id}
-              className="searchResultItem"
-              onClick={() => setSelectedStore(store)}
-            >
-              <h3>{store.name}</h3>
-              <p>{store.category}</p>
-              <p>{store.address}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* 상세보기 바텀시트 */}
-      <BottomSheet
-        store={selectedStore}
-        onClose={() => setSelectedStore(null)}
-      />
+      {selectedStore && (
+        <BottomSheet
+          store={selectedStore}
+          onClose={() => setSelectedStore(null)}
+        />
+      )}
 
       {/* 하단 탭 */}
       <div className="bottomTab">

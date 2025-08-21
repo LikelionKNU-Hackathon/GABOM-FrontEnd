@@ -3,31 +3,90 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #fff;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  background: #ffe6e7;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-out;
-  z-index: 20;
+  transition: height 0.3s ease;
+  height: 180px; /* 기본 높이 줄임 */
+  overflow: hidden;
+  z-index: 100;
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+.bottomSheet.expanded {
+  height: 420px; /* 확장 시 */
+}
+
+.dragHandle {
+  width: 40px;
+  height: 3px;
+  background: #bbb;
+  border-radius: 2px;
+  margin: 8px auto;
+}
+
+/* ✅ 이름+카테고리+버튼 같은 줄 */
+.sheetHeader {
+  display: flex;
+  justify-content: space-between; /* 양쪽 끝 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 0 20px;
+}
+
+.storeTitle {
+  display: flex;
+  align-items: center; /* baseline → center 로 수정 */
+  gap: 6px;
+}
+
+.storeTitle h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.category {
+  font-size: 14px;
+  color: gray;
+}
+
+.verifyBtn {
+  background-color: #ffb1b4;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .sheetContent {
-  padding: 20px;
+  padding: 16px 20px 24px;
 }
 
-.closeBtn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 10px;
+.sheetContent p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* 방문자 섹션 */
+.visitSection {
+  margin-top: 14px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.visitSection h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.visitSection p {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
 }
