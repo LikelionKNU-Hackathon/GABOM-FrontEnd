@@ -16,7 +16,7 @@ function MainPage() {
   const [results, setResults] = useState([]);
   const [selectedStore, setSelectedStore] = useState(null);
 
-  // ✅ 개발 모드 스위치 (true = mock, false = 백엔드 API)
+  // ✅ 개발 모드 스위치 (true = mock, false = 실제 API)
   const useMock = true;
 
   useEffect(() => {
@@ -62,9 +62,18 @@ function MainPage() {
             address: "서울 강남구 어딘가 123",
           },
         ];
-        setResults(mock);
+
+        // ✅ 키워드 필터링
+        const filtered = mock.filter(
+          (s) =>
+            s.name.includes(keyword) ||
+            s.category.includes(keyword) ||
+            s.address.includes(keyword)
+        );
+
+        setResults(filtered);
       } else {
-        // ✅ 실제 API 연결
+        // ✅ 실제 API 연동
         try {
           const res = await fetch(`/api/stores/search?keyword=${keyword}`);
           const data = await res.json();
@@ -85,7 +94,8 @@ function MainPage() {
       <div className="searchBar">
         <img className="SearchImage" src={search} alt="검색" />
         <input
-          id="searchInput" // ✅ 추가
+          id="searchInput"
+          name="search"
           type="text"
           placeholder="검색"
           className="searchInput"
