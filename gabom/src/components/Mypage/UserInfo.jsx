@@ -12,7 +12,7 @@ export default function UserInfo() {
   const inputs = ["이름", "아이디", "비밀번호", "이메일", "닉네임"];
 
   const handleSave = () => {
-    navigate(-1); // 저장 후 마이페이지로 돌아가기
+    navigate(-1); 
   };
 
   return (

@@ -127,7 +127,7 @@ function MainPage() {
           </Link>
         </div>
         <div className="tabItem">
-          <Link to="/stamp">
+          <Link to="/PassPort">
             <img className="StampImage" src={passport} alt="스탬프" />
             스탬프
           </Link>
