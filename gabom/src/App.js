@@ -22,11 +22,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/*<Route path="/" element={<StartPage />} />
+        <Route path="/" element={<StartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/findid" element={<FindIdPage />} />
-        <Route path="/findpw" element={<FindPassWordPage />} />*/}
+        <Route path="/findpw" element={<FindPassWordPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/aichat" element={<AiChatPage />} />
         <Route path="/PassPort" element={<StampPage />} />
