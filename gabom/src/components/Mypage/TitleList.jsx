@@ -28,7 +28,7 @@ export default function TitleList() {
           src={backIcon}
           alt="뒤로가기"
           className={styles.backBtn}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/title")}
         />
         <h1 className={styles.title}>칭호목록</h1>
       </div>

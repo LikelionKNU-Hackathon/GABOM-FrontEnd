@@ -22,7 +22,7 @@ export default function Title() {
 
   const handleSave = () => {
     localStorage.setItem("selectedTitle", selectedTitle);
-    navigate(-1); // Mypage로 돌아가기
+    navigate("/Mypage"); 
   };
 
   return (
@@ -33,7 +33,7 @@ export default function Title() {
           src={backIcon}
           alt="뒤로가기"
           className={styles.backBtn}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/Mypage")}
         />
         <h1 className={styles.title}>칭호</h1>
       </div>

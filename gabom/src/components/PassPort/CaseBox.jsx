@@ -45,7 +45,7 @@ export default function CaseBox() {
     <div className={styles.caseBoxContainer}>
       {/* 헤더 */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate(-1)}>
+        <button className={styles.backBtn} onClick={() => navigate("/passport")}>
           <img
             src={require("../../assets/icon/back.png")}
             alt="뒤로가기"

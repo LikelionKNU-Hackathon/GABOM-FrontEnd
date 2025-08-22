@@ -43,7 +43,7 @@
   transition: transform 0.2s;
 }
 
-/* 하단바처럼 고정 */
+
 .caseBtn {
  position: fixed;
   bottom: 20px;

@@ -15,6 +15,16 @@ export default function UserInfo() {
     navigate(-1); 
   };
 
+  // 탈퇴하기 클릭
+  const handleWithdraw = () => {
+    const confirmed = window.confirm("정말 탈퇴하시겠습니까?");
+    if (confirmed) {
+      // TODO: 실제 탈퇴 API 요청 넣을 수 있음
+      alert("회원 탈퇴가 완료되었습니다.");
+      navigate("/"); 
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* 헤더 */}
@@ -35,7 +45,9 @@ export default function UserInfo() {
       ))}
 
       {/* 탈퇴하기 */}
-      <div className={styles.withdraw}>탈퇴하기</div>
+      <div className={styles.withdraw} onClick={handleWithdraw}>
+        탈퇴하기
+      </div>
 
       {/* 저장하기 버튼 */}
       <button className={styles.saveBtn} onClick={handleSave}>
