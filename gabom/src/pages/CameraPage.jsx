@@ -22,7 +22,7 @@ export default function CameraPage() {
         setError("");
 
         const response = await axios.post(
-          "http://localhost:8080/api/visits/verify",
+          "https://gabom.shop/api/visits/verify",
           { qrData: text },
           { withCredentials: true }
         );

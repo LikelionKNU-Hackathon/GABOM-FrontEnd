@@ -20,7 +20,7 @@ function MainPage() {
   const [isSearching, setIsSearching] = useState(false); // ✅ 검색 모드 여부
   const markersRef = useRef([]);
 
-  const useMock = true;
+  const useMock = false;
 
   useEffect(() => {
     if (!window.kakao) {
@@ -83,7 +83,9 @@ function MainPage() {
         );
       } else {
         try {
-          const res = await fetch(`/api/stores/search?keyword=${keyword}`);
+          const res = await fetch(
+            `https://gabom.shop/api/stores/search?keyword=${keyword}`
+          );
           results = await res.json();
         } catch (err) {
           console.error("검색 실패:", err);

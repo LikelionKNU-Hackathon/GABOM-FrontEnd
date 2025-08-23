@@ -8,7 +8,7 @@ import "./RankPage.css";
  * 개발 중에는 true로 두고 Mock 데이터 확인
  * 백엔드 연결할 때 false로 바꾸세요.
  */
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 const MOCK = {
   topRanks: [
@@ -36,7 +36,7 @@ export default function RankPage() {
     setLoading(true);
     setErr("");
     try {
-      const res = await axios.get("http://localhost:8080/api/ranking", {
+      const res = await axios.get("https://gabom.shop/api/rankings", {
         withCredentials: true,
       });
 

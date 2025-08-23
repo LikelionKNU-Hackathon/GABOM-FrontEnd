@@ -12,9 +12,12 @@ export default function FindPasswordPage() {
 
   const sendVerificationCode = async () => {
     try {
-      const res = await axios.post("/api/users/find-password", {
-        email: email,
-      });
+      const res = await axios.post(
+        "https://gabom.shop/api/users/find-password",
+        {
+          email: email,
+        }
+      );
       if (res.data.success) {
         alert("인증번호가 발송되었습니다.");
         setCodeSent(true);
@@ -29,7 +32,7 @@ export default function FindPasswordPage() {
 
   const verifyCode = async () => {
     try {
-      const res = await axios.post("/api/users/verify-code", {
+      const res = await axios.post("https://gabom.shop/api/users/verify-code", {
         email: email,
         code: verificationCode,
       });

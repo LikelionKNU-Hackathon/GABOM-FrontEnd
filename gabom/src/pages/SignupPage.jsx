@@ -6,8 +6,8 @@ import eye from "../images/fluenteye.png";
 import "./SignupPage.css";
 
 const API = {
-  CHECK: "/api/user/check", // ← 백엔드 경로 다르면 여기만 바꾸세요
-  SIGNUP: "/api/user/signup", // 예: "/api/users/signup"
+  CHECK: "https://gabom.shop/api/users/check?type=nickname&value=닉값", // ← 백엔드 경로 다르면 여기만 바꾸세요
+  SIGNUP: "https://gabom.shop/api/users", // 예: "/api/users/signup"
 };
 
 export default function SignupPage() {

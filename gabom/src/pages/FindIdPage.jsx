@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./FindIdPage.css";
 
-const API_FIND_ID = "/api/user/find-id"; // ← 백엔드 경로만 맞춰주세요
+const API_FIND_ID = "https://gabom.shop/api/users/find-id"; // ← 백엔드 경로만 맞춰주세요
 
 export default function FindIdPage() {
   const [email, setEmail] = useState("");
