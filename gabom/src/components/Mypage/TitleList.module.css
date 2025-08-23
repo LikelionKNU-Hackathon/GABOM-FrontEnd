@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 80px;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  background: #fff; 
+  z-index: 10; 
+}
+
+/* 뒤로가기 버튼 */
+.backBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* 칭호 타이틀 */
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* 칭호 리스트 */
+.titleList {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  margin-top: 100px; 
+  gap: 10px;
+}
+
+/* 칭호 카드 */
+.titleItem {
+  width: 358px;
+  height: 80px;
+  border-radius: 12px;
+  border: 1px solid #ccc; 
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 18px;
+  font-weight: bold;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* n/10 표시 */
+.titleCount {
+  font-size: 16px;
+  color: gray;
+}
+
+.titleCount.collected {
+  color: #ff8c94; 
+}

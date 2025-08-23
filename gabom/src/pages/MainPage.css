@@ -1,0 +1,170 @@
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* 전역 리셋 */
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+
+/* 기준 컨테이너 */
+.main {
+  position: relative; /* 오버레이 기준 */
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  font-family: "Pretendard", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+/* 지도 */
+.mapContainer {
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* 제일 뒤 */
+}
+
+/* 검색창 */
+.searchBar {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: calc(var(--safe-top) + 38px);
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 20; /* 맨 위 */
+}
+
+.SearchImage {
+  margin-right: 5px;
+  width: 24px;
+  height: 24px;
+}
+
+.searchInput {
+  flex: 1;
+  height: 100%;
+  border: 0;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
+}
+
+/* ✅ 검색결과 리스트 제거됨
+  .searchResults { ... }
+  .searchResultItem { ... }
+  */
+
+/* 바텀시트 */
+.bottomSheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 90px; /* ✅ 하단탭 위로 올림 */
+  background: #fff;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 30; /* 제일 위 */
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* 바텀시트 안쪽 컨텐츠 */
+.sheetContent {
+  padding: 20px;
+}
+.closeBtn {
+  float: right;
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.bottomSheet h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+.bottomSheet p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* 하단 탭 */
+.bottomTab {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  bottom: 0;
+
+  padding: 12px 10px 18px;
+  background: pink;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: 0 -3px 16px rgba(0, 0, 0, 0.18);
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  z-index: 10; /* 지도 위, 결과/바텀시트보다 뒤 */
+}
+
+.tabItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+  font-size: 10px;
+  margin-bottom: 18px;
+  user-select: none;
+}
+
+.tabItem img {
+  width: 28px;
+  height: 28px;
+}
+
+a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+
+.BackIcon {
+  margin-right: 10px;
+  width: 12px;
+  height: 24px;
+  cursor: pointer;
+}
