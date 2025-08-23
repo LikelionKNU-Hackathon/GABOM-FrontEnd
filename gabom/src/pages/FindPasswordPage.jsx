@@ -36,15 +36,14 @@ export default function FindPasswordPage() {
         email: email,
         code: verificationCode,
       });
-      if (res.data.verified) {
+
+      if (res.status === 200) {
         alert("인증이 완료되었습니다.");
         navigate("/reset-password");
-      } else {
-        alert("인증번호가 올바르지 않습니다.");
       }
     } catch (err) {
       console.error(err);
-      alert("인증 확인 중 오류가 발생했습니다.");
+      alert("인증번호가 올바르지 않습니다.");
     }
   };
 
