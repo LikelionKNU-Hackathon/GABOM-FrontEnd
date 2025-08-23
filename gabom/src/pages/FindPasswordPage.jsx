@@ -86,7 +86,7 @@ export default function FindPasswordPage() {
         {/* 비밀번호 찾기 버튼 */}
         <Link to="/login">
           <button className="FindPasswordButton" type="submit">
-            비밀번호 찾기
+            나가기
           </button>
         </Link>
       </form>
