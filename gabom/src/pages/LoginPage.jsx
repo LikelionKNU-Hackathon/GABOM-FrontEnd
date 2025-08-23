@@ -39,22 +39,25 @@ export default function LoginPage() {
 
     try {
       const res = await axios.post(
-        "https://gabom.shop/api/users/login", // 필요 시 경로 조정
-        { username: id, password },
-        { withCredentials: true } // 세션/쿠키 쓰면 유지
+        "https://gabom.shop/api/users/login",
+        { loginId: id, password }, // ✅ username → loginId
+        { withCredentials: true }
       );
 
-      if (res.data?.success) {
+      // 성공 처리
+      if (res.status === 200) {
         setMessage("로그인 성공!");
-        navigate("/main"); // ✅ 성공 시에만 이동
-      } else {
-        setMessage(
-          `로그인 실패: ${res.data?.message ?? "아이디/비밀번호를 확인하세요."}`
-        );
+        // 토큰 저장 (필요 시)
+        localStorage.setItem("accessToken", res.data.accessToken);
+        navigate("/main");
       }
     } catch (err) {
       console.error(err);
-      setMessage("로그인 중 오류가 발생했습니다.");
+
+      const msg =
+        err?.response?.data?.message ||
+        "아이디 또는 비밀번호가 올바르지 않습니다.";
+      setMessage(`로그인 실패: ${msg}`);
     } finally {
       setLoading(false);
     }
