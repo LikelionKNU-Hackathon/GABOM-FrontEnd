@@ -97,6 +97,8 @@ input[type="checkbox"] {
 }
 
 .SignupButton1 {
+  position: fixed;
+  bottom: 40px;
   width: 358px;
   height: 60px;
   font-size: 16px;
@@ -106,5 +108,5 @@ input[type="checkbox"] {
   border-style: none;
   background-color: #ffe6e7;
   box-shadow: 0 4px 3px rgba(0, 0, 0, 0.15), 0 0 6px rgba(0, 0, 0, 0.15);
-  margin-top: 320px;
+  margin-top: 360px;
 }

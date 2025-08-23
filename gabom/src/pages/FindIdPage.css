@@ -30,15 +30,19 @@ body {
   border: 1px solid#d9d9d9;
 }
 
-/* 버튼 스타일 */
 .FindidButton {
+  position: fixed;
+  bottom: 40px;
+  left: 50%; /* 화면의 정가운데 기준 */
+  transform: translateX(-50%); /* 버튼 width 기준 정확히 가운데 맞추기 */
   width: 358px;
   height: 60px;
   font-size: 16px;
   font-weight: bold;
   color: white;
   border-radius: 10px;
-  border-style: none;
+  border: none;
   background-color: #ffb1b4;
-  margin-top: 425px;
+  padding: 0;
+  margin: 0;
 }
