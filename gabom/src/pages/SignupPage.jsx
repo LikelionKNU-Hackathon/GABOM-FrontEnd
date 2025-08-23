@@ -84,10 +84,9 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      // ✅ 엔티티/DTO 필드명과 정확히 일치시킴
       const payload = {
-        loginId: loginId.trim(), // 로그인 아이디
-        username: username.trim(), // 이름
+        loginId: loginId.trim(),
+        username: username.trim(),
         password,
         email: email.trim(),
         nickname: nickname.trim(),
@@ -97,17 +96,12 @@ export default function SignupPage() {
         withCredentials: true,
       });
 
-      if (res.data?.success) {
-        alert("회원가입 성공! 로그인 페이지로 이동합니다.");
-        navigate("/login");
-      } else {
-        // 서버가 success:false 형태로 보낼 수도 있으므로 메시지 노출
-        alert(`회원가입 실패: ${res.data?.message ?? "알 수 없는 오류"}`);
-      }
+      // ✅ 서버가 200 OK 주면 성공 처리
+      alert(res.data?.message || "회원가입 성공! 로그인 페이지로 이동합니다.");
+      navigate("/login");
     } catch (err) {
       console.error(err);
 
-      // 서버가 4xx/409로 상세 메세지 내려줄 경우 표시
       const msg =
         err?.response?.data?.message ||
         err?.response?.data?.error ||
