@@ -1,0 +1,51 @@
+body {
+  font-family: "Pretendard", sans-serif;
+  background-color: #fafafa;
+  margin: 0;
+}
+
+.start-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 위-중간-아래 자동 배치 */
+  align-items: center;
+  height: 100vh;
+  padding: 60px 20px;
+  box-sizing: border-box;
+}
+
+/* 텍스트 + 로고 묶음 */
+.top-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 로고는 가운데 */
+  gap: 55px; /* ✅ 텍스트-이미지 간격 (여기서 조절) */
+  width: 100%;
+}
+
+.start-text {
+  align-self: flex-start; /* 부모 flex 기준 왼쪽 정렬 */
+  text-align: left;
+  font-size: 24px;
+  line-height: 35px;
+  margin: 0;
+  margin-top: 90px;
+  padding-left: 23px; /* 왼쪽 여백 */
+}
+
+.LogoImage {
+  width: 180px;
+  height: auto;
+}
+
+.StartButton {
+  width: 358px;
+  height: 60px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #ffb1b4;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 0 6px rgba(0, 0, 0, 0.15);
+}
