@@ -9,7 +9,7 @@ import camera from "../images/camera.png";
 import rank from "../images/rank.png";
 import mypage from "../images/mypage.png";
 import markerIcon from "../images/pinbig.png";
-import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
+import { Link } from "react-router-dom"; // ✅ useNavigate 추가
 import BottomSheet from "./BottomSheet";
 
 function MainPage() {
@@ -19,7 +19,6 @@ function MainPage() {
   const [selectedStore, setSelectedStore] = useState(null);
   const [isSearching, setIsSearching] = useState(false); // ✅ 검색 모드 여부
   const markersRef = useRef([]);
-  const navigate = useNavigate(); // ✅ 네비게이트 사용
 
   const useMock = true;
 
