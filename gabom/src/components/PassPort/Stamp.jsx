@@ -37,7 +37,7 @@ export default function Stamp({ category = "asia" }) {
     <div className={styles.stampContainer}>
       {/* 헤더 */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate(-1)}>
+        <button className={styles.backBtn} onClick={() => navigate("/passport")}>
           <img src={backIcon} alt="뒤로가기" width={20} height={20} />
         </button>
       </div>

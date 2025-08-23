@@ -30,6 +30,17 @@ export default function Mypage() {
     setShowModal(false);
   };
 
+  // 로그아웃 처리 
+  const handleLogout = () => {
+    const confirmed = window.confirm("로그아웃 하시겠습니까?");
+    if (confirmed) {
+      // 필요 시 토큰 삭제 등 로그아웃 처리
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/"); 
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* 상단 헤더 */}
@@ -38,7 +49,7 @@ export default function Mypage() {
           src={backIcon}
           alt="뒤로가기"
           className={styles.backBtn}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/Main")}
         />
         <h1 className={styles.title}>마이페이지</h1>
       </div>
@@ -84,7 +95,10 @@ export default function Mypage() {
         </button>
       </div>
 
-      <button className={styles.logoutBtn}>로그아웃</button>
+      {/* 로그아웃 */}
+      <button className={styles.logoutBtn} onClick={handleLogout}>
+        로그아웃
+      </button>
 
       {/* EditProfile 모달 */}
       {showModal && (
@@ -100,5 +114,3 @@ export default function Mypage() {
     </div>
   );
 }
-
-

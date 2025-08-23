@@ -18,7 +18,7 @@ export default function PassPort() {
   return (
     <div className={styles.stampContainer}>
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate("/")}>
+        <button className={styles.backBtn} onClick={() => navigate("/Main")}>
           <img src={backIcon} alt="뒤로가기" width={20} height={20} />
         </button>
         <h2 className={styles.title}>스탬프</h2>
