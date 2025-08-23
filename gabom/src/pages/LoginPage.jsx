@@ -39,7 +39,7 @@ export default function LoginPage() {
 
     try {
       const res = await axios.post(
-        "https://gabom.shop/api/user/login", // 필요 시 경로 조정
+        "https://gabom.shop/api/users/login", // 필요 시 경로 조정
         { username: id, password },
         { withCredentials: true } // 세션/쿠키 쓰면 유지
       );
