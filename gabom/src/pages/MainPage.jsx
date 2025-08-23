@@ -2,13 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 import "./MainPage.css";
 import search from "../images/search.png";
+import backIconPink from "../images/back_pink.png"; // ✅ 뒤로가기 아이콘
 import chat from "../images/chat.png";
 import passport from "../images/passport.png";
 import camera from "../images/camera.png";
 import rank from "../images/rank.png";
 import mypage from "../images/mypage.png";
-import markerIcon from "../images/pinbig.png"; // ✅ 우리 마커 이미지
-import { Link } from "react-router-dom";
+import markerIcon from "../images/pinbig.png";
+import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate 추가
 import BottomSheet from "./BottomSheet";
 
 function MainPage() {
@@ -16,7 +17,9 @@ function MainPage() {
   const [map, setMap] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [selectedStore, setSelectedStore] = useState(null);
+  const [isSearching, setIsSearching] = useState(false); // ✅ 검색 모드 여부
   const markersRef = useRef([]);
+  const navigate = useNavigate(); // ✅ 네비게이트 사용
 
   const useMock = true;
 
@@ -93,15 +96,13 @@ function MainPage() {
         setSelectedStore(store);
 
         if (map) {
-          // 이전 마커 제거
           markersRef.current.forEach((m) => m.setMap(null));
           markersRef.current = [];
 
-          // ✅ 커스텀 마커 이미지 생성
           const markerImage = new window.kakao.maps.MarkerImage(
             markerIcon,
-            new window.kakao.maps.Size(34, 53), // 마커 크기
-            { offset: new window.kakao.maps.Point(20, 40) } // 기준점 (아래쪽이 좌표 찍히는 위치)
+            new window.kakao.maps.Size(34, 53),
+            { offset: new window.kakao.maps.Point(20, 40) }
           );
 
           const marker = new window.kakao.maps.Marker({
@@ -110,12 +111,11 @@ function MainPage() {
               store.latitude,
               store.longitude
             ),
-            image: markerImage, // ✅ 우리 마커 이미지 적용
+            image: markerImage,
           });
 
           markersRef.current.push(marker);
 
-          // 지도 이동
           map.setCenter(
             new window.kakao.maps.LatLng(store.latitude, store.longitude)
           );
@@ -134,17 +134,48 @@ function MainPage() {
 
       {/* 검색창 */}
       <div className="searchBar">
-        <img className="SearchImage" src={search} alt="검색" />
-        <input
-          id="searchInput"
-          name="search"
-          type="text"
-          placeholder="검색"
-          className="searchInput"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onKeyDown={handleSearch}
-        />
+        {isSearching ? (
+          <>
+            <img
+              src={backIconPink}
+              alt="뒤로가기"
+              className="BackIcon"
+              onClick={() => {
+                setIsSearching(false); // 검색모드 해제
+                setKeyword(""); // 검색어 초기화
+                setSelectedStore(null); // 선택된 매장 초기화
+                markersRef.current.forEach((m) => m.setMap(null)); // 마커 제거
+                markersRef.current = [];
+              }}
+            />
+
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="검색"
+              className="searchInput"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={handleSearch}
+              autoFocus
+            />
+            <img className="SearchImage" src={search} alt="검색" />
+          </>
+        ) : (
+          <>
+            <img className="SearchImage" src={search} alt="검색" />
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="검색"
+              className="searchInput"
+              value={keyword}
+              onFocus={() => setIsSearching(true)} // 검색창 눌렀을 때 검색모드로
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={handleSearch}
+            />
+          </>
+        )}
       </div>
 
       {/* 상세보기 바텀시트 */}
