@@ -110,18 +110,20 @@ export default function SignupPage() {
       <form onSubmit={handleSignup}>
         <div className="box">
           <p className="text">이름</p>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            autoComplete="name"
-          />
+          <div className="inputWrapper">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+            />
+          </div>
         </div>
 
         <div className="box">
           <p className="text">아이디</p>
-          <div className="row">
+          <div className="inputWrapper">
             <input
               type="text"
               value={id}
@@ -131,7 +133,7 @@ export default function SignupPage() {
             />
             <button
               type="button"
-              className="checkId"
+              className="inlineButton"
               onClick={checkIdDuplicate}
             >
               중복확인
@@ -141,7 +143,7 @@ export default function SignupPage() {
 
         <div className="box">
           <p className="text">비밀번호</p>
-          <div className="row">
+          <div className="inputWrapper">
             <input
               type={showPassword ? "text" : "password"}
               value={password}
@@ -160,18 +162,20 @@ export default function SignupPage() {
 
         <div className="box">
           <p className="text">이메일</p>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
+          <div className="inputWrapper">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
+          </div>
         </div>
 
         <div className="box">
           <p className="text">닉네임</p>
-          <div className="row">
+          <div className="inputWrapper">
             <input
               type="text"
               value={nickname}
@@ -180,7 +184,7 @@ export default function SignupPage() {
             />
             <button
               type="button"
-              className="checknickname"
+              className="inlineButton"
               onClick={checkNicknameDuplicate}
             >
               중복확인
@@ -188,7 +192,6 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* ✅ Link로 감싸지 말고 submit 버튼만 */}
         <button className="SignupButton2" type="submit" disabled={loading}>
           {loading ? "처리 중..." : "회원가입"}
         </button>
