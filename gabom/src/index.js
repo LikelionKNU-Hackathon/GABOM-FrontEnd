@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { register } from "./serviceWorkerRegistration";
+import { unregister } from "./serviceWorkerRegistration";  // ✅ 서비스워커 등록 해제용
 
-register();
+// 서비스워커 해제 (캐시 방지)
+unregister();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,7 +13,6 @@ root.render(
     <App />
   </React.StrictMode>
 );
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
+// 성능 측정 (선택 사항)
 reportWebVitals();
