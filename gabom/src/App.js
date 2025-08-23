@@ -12,6 +12,7 @@ import CaseBox from "./components/PassPort/CaseBox";
 import Stamp from "./components/PassPort/Stamp";
 import CameraPage from "./pages/CameraPage";
 import RankPage from "./pages/RankPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 import Mypage from "./components/Mypage/Mypage";
 import UserInfo from "./components/Mypage/UserInfo";
@@ -39,6 +40,7 @@ function App() {
         <Route path="/userinfo" element={<UserInfo />} />
         <Route path="/title" element={<Title />} />
         <Route path="/titlelist" element={<TitleList />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </Router>
   );
