@@ -14,15 +14,13 @@ export default function FindPasswordPage() {
     try {
       const res = await axios.post(
         "https://gabom.shop/api/users/find-password",
-        {
-          email: email,
-        }
+        { email: email }
       );
-      if (res.data.success) {
+
+      // ✅ 200 응답이면 성공 처리
+      if (res.status === 200) {
         alert("인증번호가 발송되었습니다.");
         setCodeSent(true);
-      } else {
-        alert("이메일을 확인해주세요.");
       }
     } catch (err) {
       console.error(err);
