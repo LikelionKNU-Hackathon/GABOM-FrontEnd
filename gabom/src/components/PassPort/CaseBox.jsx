@@ -49,8 +49,6 @@ export default function CaseBox() {
           <img
             src={require("../../assets/icon/back.png")}
             alt="뒤로가기"
-            width={20}
-            height={20}
           />
         </button>
         <h2 className={styles.title}>케이스</h2>

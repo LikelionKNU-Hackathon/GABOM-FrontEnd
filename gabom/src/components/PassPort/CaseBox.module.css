@@ -16,6 +16,8 @@
 .backBtn {
   background: none;
   border: none;
+  width: 12px;
+  height: 24px;
   cursor: pointer;
 }
 
