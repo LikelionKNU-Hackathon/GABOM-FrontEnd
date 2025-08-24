@@ -9,11 +9,11 @@
 /* 헤더 */
 .header {
   width: 100%;
-  height: 100px;                
+  height: 100px;
   display: flex;
-  align-items: center;          
+  align-items: center;
   padding: 0 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .backBtn img {
-   cursor: pointer;
+  cursor: pointer;
   width: 12px;
   height: 24px;
 }
@@ -36,13 +36,12 @@
   overflow: hidden;
 }
 
-
 .stampImage {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   transform: translate(-50%, -50%);
-  pointer-events: none;
+  object-fit: contain;
 }
 
 .pageNav {
@@ -51,7 +50,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .pageNav button {
@@ -73,7 +72,6 @@
   font-size: 16px;
   font-weight: bold;
 }
-
 
 @media (max-width: 400px) {
   .stampImage {

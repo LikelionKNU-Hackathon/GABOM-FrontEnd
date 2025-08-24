@@ -56,6 +56,7 @@
   width: 100%;
   padding: 0 50px;
   box-sizing: border-box;
+  color: black;
   margin-top: 10px; /* 위 버튼과 간격 */
 }
 
