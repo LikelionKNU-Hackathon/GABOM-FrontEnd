@@ -31,18 +31,28 @@
 
 .stampArea {
   flex: 1;
-  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열 */
+  grid-template-rows: repeat(3, 1fr); /* 3행 */
+  gap: 12px; /* 스탬프 사이 여백 */
+  justify-items: center;
+  align-items: center;
   background-color: #f9f9f9;
-  overflow: hidden;
+  padding: 20px;
+}
+
+.stampSlot {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .stampImage {
-  position: absolute;
-  width: 100px; /* 크기 줄여서 여권 안쪽에 맞춤 */
-  height: 100px;
-  object-fit: contain; /* 비율 유지하면서 잘리지 않게 */
-  transform: translate(-50%, -50%);
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 짤림 방지 */
 }
 
 .pageNav {
