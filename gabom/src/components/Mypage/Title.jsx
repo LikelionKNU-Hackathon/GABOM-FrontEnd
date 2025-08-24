@@ -85,26 +85,27 @@ export default function Title() {
         {titles.length === 0 ? (
           <p>칭호를 불러오는 중...</p>
         ) : (
-          titles.map((t) => (
-            <button
-              key={t.titleId}
-              className={`${styles.titleItem} ${
-                selectedTitleId === t.titleId ? styles.selected : ""
-              }`}
-              onClick={() => handleSelect(t.titleId)}
-              disabled={!t.achieved} // 달성 못한 칭호는 선택 불가
-            >
-              <div>
-                <div>{t.name}</div>
-                <div style={{ fontSize: "14px", color: "#666" }}>
-                  {t.description}
+          titles
+            .filter((t) => t.achieved) // ✅ 획득한 칭호만 표시
+            .map((t) => (
+              <button
+                key={t.titleId}
+                className={`${styles.titleItem} ${
+                  selectedTitleId === t.titleId ? styles.selected : ""
+                }`}
+                onClick={() => handleSelect(t.titleId)}
+              >
+                <div>
+                  <div>{t.name}</div>
+                  <div style={{ fontSize: "14px", color: "#666" }}>
+                    {t.description}
+                  </div>
                 </div>
-              </div>
-              <span>
-                {t.currentCount}/{t.goalCount}
-              </span>
-            </button>
-          ))
+                <span>
+                  {t.currentCount}/{t.goalCount}
+                </span>
+              </button>
+            ))
         )}
       </div>
 
