@@ -34,25 +34,17 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3열 */
   grid-template-rows: repeat(3, 1fr); /* 3행 */
-  gap: 12px; /* 스탬프 사이 여백 */
+  gap: 12px; /* 칸 간격 */
   justify-items: center;
   align-items: center;
   background-color: #f9f9f9;
   padding: 20px;
 }
 
-.stampSlot {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .stampImage {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* 짤림 방지 */
+  width: 90px;
+  height: 90px;
+  object-fit: contain; /* 이미지 짤림 방지 */
 }
 
 .pageNav {
