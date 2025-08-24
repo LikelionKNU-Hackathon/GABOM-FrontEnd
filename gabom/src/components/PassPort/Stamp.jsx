@@ -23,23 +23,18 @@ export default function Stamp() {
       .catch((err) => console.error("❌ 스탬프 불러오기 실패:", err));
   }, [token]);
 
-  // 👉 한 페이지에 9개씩 (3x3 격자)
+  // 👉 count만큼 복제된 배열 만들기
+  const expandedStamps = stamps.flatMap((s) =>
+    Array.from({ length: s.count }, () => s)
+  );
+
+  // 👉 한 페이지에 9개씩 배치
   const stampsPerPage = 9;
   const startIdx = page * stampsPerPage;
-  const stampsThisPage = stamps.slice(startIdx, startIdx + stampsPerPage);
-
-  // 3x3 격자 좌표 (0~1 비율로 배치)
-  const gridPositions = [
-    { x: 0.2, y: 0.2 },
-    { x: 0.5, y: 0.2 },
-    { x: 0.8, y: 0.2 },
-    { x: 0.2, y: 0.5 },
-    { x: 0.5, y: 0.5 },
-    { x: 0.8, y: 0.5 },
-    { x: 0.2, y: 0.8 },
-    { x: 0.5, y: 0.8 },
-    { x: 0.8, y: 0.8 },
-  ];
+  const stampsThisPage = expandedStamps.slice(
+    startIdx,
+    startIdx + stampsPerPage
+  );
 
   return (
     <div className={styles.stampContainer}>
@@ -52,24 +47,19 @@ export default function Stamp() {
         </button>
       </div>
 
+      {/* 스탬프 영역 */}
       <div className={styles.stampArea}>
-        {stampsThisPage.map((s, idx) => {
-          const pos = gridPositions[idx];
-          return (
-            <img
-              key={s.stampId || idx}
-              src={s.imageUrl}
-              alt={s.name}
-              className={styles.stampImage}
-              style={{
-                left: `${pos.x * 100}%`,
-                top: `${pos.y * 100}%`,
-              }}
-            />
-          );
-        })}
+        {stampsThisPage.map((s, idx) => (
+          <img
+            key={`${s.stampId}-${idx}`}
+            src={s.imageUrl}
+            alt={s.name}
+            className={styles.stampImage}
+          />
+        ))}
       </div>
 
+      {/* 페이지 네비게이션 */}
       <div className={styles.pageNav}>
         <button
           onClick={() => setPage((p) => Math.max(p - 1, 0))}
@@ -81,10 +71,10 @@ export default function Stamp() {
         <button
           onClick={() =>
             setPage((p) =>
-              (p + 1) * stampsPerPage < stamps.length ? p + 1 : p
+              (p + 1) * stampsPerPage < expandedStamps.length ? p + 1 : p
             )
           }
-          disabled={(page + 1) * stampsPerPage >= stamps.length}
+          disabled={(page + 1) * stampsPerPage >= expandedStamps.length}
         >
           다음
         </button>
