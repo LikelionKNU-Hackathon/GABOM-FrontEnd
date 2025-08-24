@@ -1,3 +1,4 @@
+// src/pages/CameraPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useZxing } from "react-zxing";
@@ -16,28 +17,46 @@ export default function CameraPage() {
       const text = res.getText();
       console.log("✅ QR 인식됨:", text);
 
-      if (result) return; // 중복 방지
-      setResult(text);
-
-      // QR이 우리 서비스용 URL인지 확인
-      if (!text.includes("/api/visits/verify")) {
-        setError("❌ 잘못된 QR 코드입니다.");
+      if (result) {
+        console.log("⚠️ 이미 인식된 결과, 무시:", result);
         return;
       }
+      setResult(text);
 
       try {
         setLoading(true);
-        const response = await axios.post(text, {}, { withCredentials: true });
+        setError("");
+
+        // ✅ 로그인 시 저장된 토큰 가져오기
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          setError("로그인이 필요합니다.");
+          return;
+        }
+
+        console.log("📡 axios POST 요청 시작:", text);
+
+        const response = await axios.post(
+          text,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // ✅ 인증 토큰 추가
+            },
+            withCredentials: true,
+          }
+        );
+
+        console.log("🎉 서버 응답:", response.data);
         setVerified(true);
         alert(response.data.message || response.data);
       } catch (err) {
+        console.error("❌ axios 요청 에러:", err);
         setError("서버 오류: 인증 불가");
       } finally {
         setLoading(false);
+        console.log("🔄 요청 종료");
       }
-    },
-    constraints: {
-      video: { facingMode: { ideal: "environment" } }, // 👈 후면카메라
     },
   });
 
@@ -46,7 +65,7 @@ export default function CameraPage() {
       <h2 className="camera-title">QR 스캔하기</h2>
 
       {!result ? (
-        // 👇 모바일 브라우저 호환 속성 추가
+        // 👇 모바일 브라우저 호환 속성 유지
         <video ref={ref} className="camera-video" muted playsInline autoPlay />
       ) : loading ? (
         <p className="camera-loading">⏳ 인증 중...</p>
