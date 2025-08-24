@@ -19,14 +19,26 @@ export default function ChatPage() {
     setMessages(newMessages);
 
     try {
+      const token = localStorage.getItem("accessToken"); // ✅ 로그인 시 저장된 토큰 꺼내오기
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
       const res = await fetch("https://gabom.shop/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ 토큰 추가
+        },
         body: JSON.stringify({
-          userId: 1, // 실제 로그인 유저 ID로 교체
-          message: input,
+          message: input, // ✅ userId는 필요 없음
         }),
       });
+
+      if (!res.ok) {
+        throw new Error("API 요청 실패");
+      }
 
       const data = await res.json();
       setMessages([
@@ -34,7 +46,11 @@ export default function ChatPage() {
         { role: "assistant", content: data.response },
       ]);
     } catch (err) {
-      console.error(err);
+      console.error("채팅 전송 실패:", err);
+      setMessages([
+        ...newMessages,
+        { role: "assistant", content: "❌ 서버와 연결할 수 없습니다." },
+      ]);
     }
 
     setInput("");

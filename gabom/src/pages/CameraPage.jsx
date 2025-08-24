@@ -14,31 +14,30 @@ export default function CameraPage() {
   const { ref } = useZxing({
     onDecodeResult: async (res) => {
       const text = res.getText();
-      console.log("✅ QR 인식됨:", text); // 👈 디버깅 로그
+      console.log("✅ QR 인식됨:", text);
 
-      if (result) {
-        console.log("⚠️ 이미 인식된 결과, 무시:", result);
+      if (result) return; // 중복 방지
+      setResult(text);
+
+      // QR이 우리 서비스용 URL인지 확인
+      if (!text.includes("/api/visits/verify")) {
+        setError("❌ 잘못된 QR 코드입니다.");
         return;
       }
-      setResult(text);
 
       try {
         setLoading(true);
-        setError("");
-        console.log("📡 axios POST 요청 시작:", text);
-
         const response = await axios.post(text, {}, { withCredentials: true });
-        console.log("🎉 서버 응답:", response.data);
-
         setVerified(true);
         alert(response.data.message || response.data);
       } catch (err) {
-        console.error("❌ axios 요청 에러:", err);
         setError("서버 오류: 인증 불가");
       } finally {
         setLoading(false);
-        console.log("🔄 요청 종료");
       }
+    },
+    constraints: {
+      video: { facingMode: { ideal: "environment" } }, // 👈 후면카메라
     },
   });
 
