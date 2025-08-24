@@ -14,23 +14,30 @@ export default function CameraPage() {
   const { ref } = useZxing({
     onDecodeResult: async (res) => {
       const text = res.getText();
-      if (result) return;
+      console.log("✅ QR 인식됨:", text); // 👈 디버깅 로그
+
+      if (result) {
+        console.log("⚠️ 이미 인식된 결과, 무시:", result);
+        return;
+      }
       setResult(text);
 
       try {
         setLoading(true);
         setError("");
+        console.log("📡 axios POST 요청 시작:", text);
 
-        // QR에 담긴 URL을 그대로 요청
         const response = await axios.post(text, {}, { withCredentials: true });
+        console.log("🎉 서버 응답:", response.data);
 
         setVerified(true);
-        alert(response.data); // 백엔드에서 반환한 메시지 보여주기 (예: "가게 방문 인증 완료! ...")
+        alert(response.data.message || response.data);
       } catch (err) {
-        console.error(err);
+        console.error("❌ axios 요청 에러:", err);
         setError("서버 오류: 인증 불가");
       } finally {
         setLoading(false);
+        console.log("🔄 요청 종료");
       }
     },
   });
@@ -40,7 +47,8 @@ export default function CameraPage() {
       <h2 className="camera-title">QR 스캔하기</h2>
 
       {!result ? (
-        <video ref={ref} className="camera-video" />
+        // 👇 모바일 브라우저 호환 속성 추가
+        <video ref={ref} className="camera-video" muted playsInline autoPlay />
       ) : loading ? (
         <p className="camera-loading">⏳ 인증 중...</p>
       ) : verified ? (
