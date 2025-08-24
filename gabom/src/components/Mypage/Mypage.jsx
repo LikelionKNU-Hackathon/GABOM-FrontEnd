@@ -1,43 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import EditProfile from "./EditProfile";
-import Tier from "./Tier";
+import axios from "axios";
 import styles from "./Mypage.module.css";
 
 import backIcon from "../../assets/icon/back.png";
-import pencilIcon from "../../assets/icon/pencil.png";
-
-const defaultProfile = null;
 
 export default function Mypage() {
   const navigate = useNavigate();
-  const [currentProfile, setCurrentProfile] = useState(defaultProfile);
-  const [showModal, setShowModal] = useState(false);
-  const [showTier, setShowTier] = useState(false);
-  const [title, setTitle] = useState("편의점 마니아"); 
+  const [nickname, setNickname] = useState("");
 
+  // [1] 닉네임 불러오기
   useEffect(() => {
-    const savedTitle = localStorage.getItem("selectedTitle");
-    if (savedTitle) {
-      setTitle(savedTitle);
-    }
-  }, []);
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const res = await axios.get("https://gabom.shop/api/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setNickname(res.data.nickname);
+      } catch (err) {
+        console.error("사용자 정보 조회 실패", err);
+        if (err.response?.status === 401) {
+          alert("다시 로그인 해주세요.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [navigate]);
 
   const goToUserInfo = () => navigate("/userinfo");
 
-  const handleSaveProfile = (img) => {
-    setCurrentProfile(img);
-    setShowModal(false);
-  };
-
-  // 로그아웃 처리 
-  const handleLogout = () => {
+  // [2] 로그아웃 처리
+  const handleLogout = async () => {
     const confirmed = window.confirm("로그아웃 하시겠습니까?");
-    if (confirmed) {
-      // 필요 시 토큰 삭제 등 로그아웃 처리
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "https://gabom.shop/api/users/logout",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("서버 로그아웃 실패 (무시 가능)", err);
+    } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      navigate("/"); 
+      navigate("/");
     }
   };
 
@@ -54,29 +73,10 @@ export default function Mypage() {
         <h1 className={styles.title}>마이페이지</h1>
       </div>
 
-      {/* 프로필 사진 + 연필 */}
-      <div className={styles.profileWrapper}>
-        {currentProfile ? (
-          <img src={currentProfile} alt="프로필" className={styles.profileImage} />
-        ) : (
-          <div className={styles.profileImage}></div>
-        )}
-        <div
-          className={styles.editIcon}
-          style={{
-            backgroundImage: `url(${pencilIcon})`,
-            backgroundColor: "#FFE6E7",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "50%",
-          }}
-          onClick={() => setShowModal(true)}
-        ></div>
+      {/* 닉네임 */}
+      <div className={styles.nickname}>
+        {nickname ? `${nickname}님` : "불러오는 중..."}
       </div>
-
-      {/* 닉네임 + 티어/칭호 */}
-      <div className={styles.nickname}>밥은먹고하자님</div>
-      <div className={styles.tierTitle}>초행자 / {title}</div>
 
       {/* 버튼들 */}
       <button className={styles.mainBtn} onClick={goToUserInfo}>
@@ -84,13 +84,10 @@ export default function Mypage() {
       </button>
 
       <div className={styles.subBtnWrapper}>
-        <button className={styles.subBtn} onClick={() => setShowTier(true)}>
+        <button className={styles.subBtn} onClick={() => navigate("/tier")}>
           티어
         </button>
-        <button
-          className={styles.subBtn}
-          onClick={() => navigate("/title")}
-        >
+        <button className={styles.subBtn} onClick={() => navigate("/title")}>
           칭호
         </button>
       </div>
@@ -99,18 +96,6 @@ export default function Mypage() {
       <button className={styles.logoutBtn} onClick={handleLogout}>
         로그아웃
       </button>
-
-      {/* EditProfile 모달 */}
-      {showModal && (
-        <EditProfile
-          currentProfile={currentProfile}
-          onSave={handleSaveProfile}
-          onClose={() => setShowModal(false)}
-        />
-      )}
-
-      {/* Tier 팝업 */}
-      {showTier && <Tier onClose={() => setShowTier(false)} />}
     </div>
   );
 }
