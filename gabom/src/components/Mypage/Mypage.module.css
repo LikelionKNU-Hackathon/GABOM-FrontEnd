@@ -28,43 +28,11 @@
   font-weight: bold;
 }
 
-/* 프로필 사진 + 연필 아이콘 */
-.profileWrapper {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  margin-top: 100px;
-  margin-bottom: 30px;
-  transform: translateY(-50px);
-}
-
-.profileImage {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: #ddd;
-}
-
-.editIcon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #ffe6e7;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  cursor: pointer;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 50%;
-}
-
 /* 닉네임 */
 .nickname {
   font-size: 20px;
   font-weight: 600;
-  margin-bottom: 10px;
-  transform: translateY(-50px);
+  margin: 30px 0 20px; /* 위 여백 추가, 아래 버튼과 간격 */
 }
 
 /* 회원정보 버튼 */
@@ -76,7 +44,7 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   font-size: 18px;
-  transform: translateY(-50px);
+  margin-bottom: 20px; /* 닉네임과 버튼 간격 */
   background-color: #ffb1b4;
   color: white;
 }
@@ -88,7 +56,7 @@
   width: 100%;
   padding: 0 50px;
   box-sizing: border-box;
-  margin-top: -30px;
+  margin-top: 10px; /* 위 버튼과 간격 */
 }
 
 .subBtn {

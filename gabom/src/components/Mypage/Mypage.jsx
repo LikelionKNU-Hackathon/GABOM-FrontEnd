@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Tier from "./Tier"; // ✅ 팝업 컴포넌트 불러오기
 import styles from "./Mypage.module.css";
 
 import backIcon from "../../assets/icon/back.png";
@@ -8,6 +9,7 @@ import backIcon from "../../assets/icon/back.png";
 export default function Mypage() {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
+  const [showTier, setShowTier] = useState(false); // ✅ 티어 팝업 상태
 
   // [1] 닉네임 불러오기
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function Mypage() {
       </button>
 
       <div className={styles.subBtnWrapper}>
-        <button className={styles.subBtn} onClick={() => navigate("/tier")}>
+        <button className={styles.subBtn} onClick={() => setShowTier(true)}>
           티어
         </button>
         <button className={styles.subBtn} onClick={() => navigate("/title")}>
@@ -96,6 +98,9 @@ export default function Mypage() {
       <button className={styles.logoutBtn} onClick={handleLogout}>
         로그아웃
       </button>
+
+      {/* ✅ 티어 팝업 */}
+      {showTier && <Tier onClose={() => setShowTier(false)} />}
     </div>
   );
 }
