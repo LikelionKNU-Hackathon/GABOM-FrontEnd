@@ -1,72 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import backIcon from "../../assets/icon/back.png";
 import styles from "./Stamp.module.css";
+import backIcon from "../../assets/icon/back.png";
+import axios from "axios";
 
-
-const categories = ["asia", "bunsik", "cafe", "china", "game", "japan", "korea", "pub", "service", "western"];
-const stampData = {};
-categories.forEach(cat => {
-  stampData[cat] = [
-    require(`../../assets/stamp/${cat}_1.png`),
-    require(`../../assets/stamp/${cat}_2.png`),
-    require(`../../assets/stamp/${cat}_3.png`)
-  ];
-});
-
-export default function Stamp({ category = "asia" }) {
+export default function Stamp() {
   const navigate = useNavigate();
   const [stamps, setStamps] = useState([]);
   const [page, setPage] = useState(0);
 
-  const handleStampClick = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const xRatio = (e.clientX - rect.left) / rect.width;
-    const yRatio = (e.clientY - rect.top) / rect.height;
+  const token = localStorage.getItem("accessToken");
 
-    // 같은 카테고리에서 순서대로 찍기
-    const nextIndex = stamps.filter(s => s.page === page).length;
-    const stampToAdd = stampData[category][nextIndex % 3];
+  useEffect(() => {
+    axios
+      .get("https://gabom.shop/api/user/stamps", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setStamps(res.data))
+      .catch((err) => console.error("스탬프 불러오기 실패:", err));
+  }, [token]);
 
-    setStamps(prev => [...prev, { src: stampToAdd, xRatio, yRatio, page }]);
-  };
-
-  const stampsThisPage = stamps.filter(s => s.page === page);
+  const stampsThisPage = stamps.filter((s) => s.page === page);
 
   return (
     <div className={styles.stampContainer}>
-      {/* 헤더 */}
       <div className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate("/passport")}>
+        <button
+          className={styles.backBtn}
+          onClick={() => navigate("/PassPort")}
+        >
           <img src={backIcon} alt="뒤로가기" />
         </button>
       </div>
 
-      {/* 스탬프 찍는 영역 */}
-      <div className={styles.stampArea} onClick={handleStampClick}>
+      <div className={styles.stampArea}>
         {stampsThisPage.map((s, idx) => (
           <img
             key={idx}
-            src={s.src}
+            src={s.imageUrl}
             alt={`stamp-${idx}`}
             className={styles.stampImage}
             style={{
               left: `${s.xRatio * 100}%`,
-              top: `${s.yRatio * 100}%`
+              top: `${s.yRatio * 100}%`,
             }}
           />
         ))}
       </div>
 
-      {/* 페이지 이동 */}
       <div className={styles.pageNav}>
-        <button onClick={() => setPage(prev => Math.max(prev - 1, 0))} disabled={page === 0}>
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 0))}
+          disabled={page === 0}
+        >
           이전
         </button>
         <span>{page + 1} 페이지</span>
-        <button onClick={() => setPage(prev => prev + 1)}>
-          다음
-        </button>
+        <button onClick={() => setPage((p) => p + 1)}>다음</button>
       </div>
     </div>
   );
