@@ -38,10 +38,11 @@
 
 .stampImage {
   position: absolute;
-  width: 100px;
+  width: 100px; /* 크기 줄여서 여권 안쪽에 맞춤 */
   height: 100px;
+  object-fit: contain; /* 비율 유지하면서 잘리지 않게 */
   transform: translate(-50%, -50%);
-  object-fit: contain;
+  pointer-events: none;
 }
 
 .pageNav {

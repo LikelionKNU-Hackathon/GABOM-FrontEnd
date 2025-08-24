@@ -49,14 +49,24 @@ export default function Stamp() {
 
       {/* 스탬프 영역 */}
       <div className={styles.stampArea}>
-        {stampsThisPage.map((s, idx) => (
-          <img
-            key={`${s.stampId}-${idx}`}
-            src={s.imageUrl}
-            alt={s.name}
-            className={styles.stampImage}
-          />
-        ))}
+        {stampsThisPage.map((s, idx) => {
+          // 좌표 강제 보정 (화면 안쪽 10% ~ 90% 영역에만 배치)
+          const x = s.xRatio ?? Math.random() * 0.8 + 0.1;
+          const y = s.yRatio ?? Math.random() * 0.8 + 0.1;
+
+          return (
+            <img
+              key={`${s.stampId}-${idx}`}
+              src={s.imageUrl}
+              alt={s.name}
+              className={styles.stampImage}
+              style={{
+                left: `${x * 100}%`,
+                top: `${y * 100}%`,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* 페이지 네비게이션 */}
