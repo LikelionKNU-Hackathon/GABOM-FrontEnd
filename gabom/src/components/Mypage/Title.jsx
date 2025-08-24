@@ -6,8 +6,8 @@ import backIcon from "../../assets/icon/back.png";
 
 export default function Title() {
   const navigate = useNavigate();
-  const [titles, setTitles] = useState([]); // ✅ 칭호 목록
-  const [selectedTitleId, setSelectedTitleId] = useState(null); // ✅ 선택된 칭호 ID
+  const [titles, setTitles] = useState([]);
+  const [selectedTitleId, setSelectedTitleId] = useState(null);
 
   // [1] 칭호 목록 불러오기
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function Title() {
 
         setTitles(res.data);
 
-        // ✅ 대표 칭호 있으면 자동 선택
+        // 대표 칭호 자동 선택
         const rep = res.data.find((t) => t.representative);
         if (rep) setSelectedTitleId(rep.titleId);
       } catch (err) {
@@ -72,7 +72,15 @@ export default function Title() {
         <h1 className={styles.title}>칭호</h1>
       </div>
 
-      {/* 칭호 목록 */}
+      {/* ✅ 칭호목록 버튼 (복원됨) */}
+      <div
+        className={styles.titleListButton}
+        onClick={() => navigate("/titlelist")}
+      >
+        칭호목록
+      </div>
+
+      {/* 칭호 카드 목록 */}
       <div className={styles.titleList}>
         {titles.length === 0 ? (
           <p>칭호를 불러오는 중...</p>
