@@ -4,10 +4,6 @@ import axios from "axios";
 import backimage from "../images/back.png";
 import "./RankPage.css";
 
-/**
- * 개발 중에는 true로 두고 Mock 데이터 확인
- * 백엔드 연결할 때 false로 바꾸세요.
- */
 const USE_MOCK = false;
 
 const MOCK = {
@@ -36,17 +32,21 @@ export default function RankPage() {
     setLoading(true);
     setErr("");
     try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
       const res = await axios.get("https://gabom.shop/api/rankings", {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const { topRanks = [], otherRanks = [], myRank } = res.data;
 
-      // 백엔드에서 stampCount → score 변환
-      const mappedTop = topRanks.map((u) => ({
-        ...u,
-        score: u.stampCount,
-      }));
+      const mappedTop = topRanks.map((u) => ({ ...u, score: u.stampCount }));
       const mappedOther = otherRanks.map((u) => ({
         ...u,
         score: u.stampCount,
@@ -55,7 +55,7 @@ export default function RankPage() {
       setRanks([...mappedTop, ...mappedOther]);
       setMyRank(myRank ? { ...myRank, score: myRank.stampCount } : null);
     } catch (e) {
-      console.error(e);
+      console.error("랭킹 불러오기 실패:", e);
       setErr("랭킹 불러오기 실패");
     } finally {
       setLoading(false);
@@ -63,10 +63,7 @@ export default function RankPage() {
   };
 
   const loadMock = () => {
-    const mappedTop = MOCK.topRanks.map((u) => ({
-      ...u,
-      score: u.stampCount,
-    }));
+    const mappedTop = MOCK.topRanks.map((u) => ({ ...u, score: u.stampCount }));
     const mappedOther = MOCK.otherRanks.map((u) => ({
       ...u,
       score: u.stampCount,
@@ -112,7 +109,6 @@ export default function RankPage() {
           </div>
 
           {/* 내 랭킹 */}
-          {/* 내 랭킹 */}
           {myRank && (
             <div className="my-rank">
               <span className="rank-no">{myRank.rank}위</span>
@@ -124,7 +120,6 @@ export default function RankPage() {
           )}
 
           {/* 나머지 랭킹 리스트 */}
-          {/* 전체 랭킹 리스트 */}
           <div className="rank-list">
             {ranks.slice(3).map((user) => (
               <div key={user.rank} className="rank-row">

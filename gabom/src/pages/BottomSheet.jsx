@@ -1,16 +1,36 @@
-// src/pages/BottomSheet.jsx
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./BottomSheet.css";
 
 export default function BottomSheet({ store }) {
   const [expanded, setExpanded] = useState(false);
+  const [detail, setDetail] = useState(null);
   const startY = useRef(0);
   const currentY = useRef(0);
   const sheetRef = useRef(null);
   const navigate = useNavigate();
 
-  if (!store) return null;
+  // ✅ hook은 무조건 컴포넌트 최상단에서 실행
+  useEffect(() => {
+    if (!store) return; // 이렇게 조건 걸면 됨
+    const fetchDetail = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const res = await axios.get(
+          `https://gabom.shop/api/stores/${store.id}`,
+          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+        );
+        setDetail(res.data);
+      } catch (err) {
+        console.error("가게 상세 불러오기 실패:", err);
+      }
+    };
+
+    fetchDetail();
+  }, [store]);
+
+  if (!store) return null; // ✅ hook 실행 이후에 return null
 
   const handleTouchStart = (e) => {
     startY.current = e.touches[0].clientY;
@@ -42,7 +62,6 @@ export default function BottomSheet({ store }) {
     >
       <div className="dragHandle" />
 
-      {/* ✅ 정렬 수정: 이름+카테고리 왼쪽 / 버튼 오른쪽 */}
       <div className="sheetHeader">
         <div className="storeTitle">
           <h2>{store.name}</h2>
@@ -57,21 +76,29 @@ export default function BottomSheet({ store }) {
         <p>주소: {store.address}</p>
         <p>영업시간: {store.openingHours}</p>
 
-        {/* ✅ 방문 정보는 expanded 상태에서만 보이도록 */}
-        {expanded && (
+        {expanded && detail && (
           <>
             <div className="visitSection">
               <h3>🏆 최다 방문자</h3>
-              <p>
-                {store.topVisitor.nickname} ({store.topVisitor.visitCount}회)
-              </p>
+              {detail.topVisitor ? (
+                <p>
+                  {detail.topVisitor.nickname} ({detail.topVisitor.visitCount}
+                  회)
+                </p>
+              ) : (
+                <p>기록 없음</p>
+              )}
             </div>
 
             <div className="visitSection">
               <h3>👤 나의 방문</h3>
-              <p>
-                {store.myVisit.nickname} ({store.myVisit.visitCount}회)
-              </p>
+              {detail.myVisit ? (
+                <p>
+                  {detail.myVisit.nickname} ({detail.myVisit.visitCount}회)
+                </p>
+              ) : (
+                <p>방문 기록 없음</p>
+              )}
             </div>
           </>
         )}

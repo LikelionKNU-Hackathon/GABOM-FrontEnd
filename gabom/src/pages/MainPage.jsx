@@ -1,24 +1,25 @@
-// src/pages/MainPage.jsx
 import { useEffect, useRef, useState } from "react";
 import "./MainPage.css";
 import search from "../images/search.png";
-import backIconPink from "../images/back_pink.png"; // ✅ 뒤로가기 아이콘
+import backIconPink from "../images/back_pink.png";
 import chat from "../images/chat.png";
 import passport from "../images/passport.png";
 import camera from "../images/camera.png";
 import rank from "../images/rank.png";
 import mypage from "../images/mypage.png";
 import markerIcon from "../images/pinbig.png";
-import { Link } from "react-router-dom"; // ✅ useNavigate 추가
+import { Link, useNavigate } from "react-router-dom";
 import BottomSheet from "./BottomSheet";
+import axios from "axios";
 
 function MainPage() {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [selectedStore, setSelectedStore] = useState(null);
-  const [isSearching, setIsSearching] = useState(false); // ✅ 검색 모드 여부
+  const [isSearching, setIsSearching] = useState(false);
   const markersRef = useRef([]);
+  const navigate = useNavigate();
 
   const useMock = false;
 
@@ -62,19 +63,7 @@ function MainPage() {
             topVisitor: { nickname: "철수", visitCount: 5 },
             myVisit: { nickname: "길동이", visitCount: 2 },
           },
-          {
-            id: 2,
-            name: "The 진분식",
-            category: "분식",
-            openingHours: "10:00 ~ 18:00",
-            address: "경기 용인시 기흥구 동백죽전대로527번길 100-3",
-            latitude: 37.2718,
-            longitude: 127.1276,
-            topVisitor: { nickname: "영희", visitCount: 3 },
-            myVisit: { nickname: "길동이", visitCount: 1 },
-          },
         ];
-
         results = mock.filter(
           (s) =>
             s.name.includes(keyword) ||
@@ -83,20 +72,33 @@ function MainPage() {
         );
       } else {
         try {
-          const res = await fetch(
-            `https://gabom.shop/api/stores/search?keyword=${keyword}`
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+          }
+
+          const res = await axios.get(
+            `https://gabom.shop/api/stores/search?keyword=${keyword}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
           );
-          results = await res.json();
+
+          results = res.data;
         } catch (err) {
           console.error("검색 실패:", err);
+          alert("검색 중 오류가 발생했습니다.");
         }
       }
 
-      if (results.length > 0) {
+      if (results && results.length > 0) {
         const store = results[0];
         setSelectedStore(store);
 
         if (map) {
+          // 기존 마커 제거
           markersRef.current.forEach((m) => m.setMap(null));
           markersRef.current = [];
 
@@ -142,14 +144,13 @@ function MainPage() {
               alt="뒤로가기"
               className="BackIcon"
               onClick={() => {
-                setIsSearching(false); // 검색모드 해제
-                setKeyword(""); // 검색어 초기화
-                setSelectedStore(null); // 선택된 매장 초기화
-                markersRef.current.forEach((m) => m.setMap(null)); // 마커 제거
+                setIsSearching(false);
+                setKeyword("");
+                setSelectedStore(null);
+                markersRef.current.forEach((m) => m.setMap(null));
                 markersRef.current = [];
               }}
             />
-
             <input
               id="searchInput"
               type="text"
@@ -171,7 +172,7 @@ function MainPage() {
               placeholder="검색"
               className="searchInput"
               value={keyword}
-              onFocus={() => setIsSearching(true)} // 검색창 눌렀을 때 검색모드로
+              onFocus={() => setIsSearching(true)}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={handleSearch}
             />

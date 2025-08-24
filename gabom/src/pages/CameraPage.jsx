@@ -21,17 +21,11 @@ export default function CameraPage() {
         setLoading(true);
         setError("");
 
-        const response = await axios.post(
-          "https://gabom.shop/api/visits/verify",
-          { qrData: text },
-          { withCredentials: true }
-        );
+        // QR에 담긴 URL을 그대로 요청
+        const response = await axios.post(text, {}, { withCredentials: true });
 
-        if (response.data.success) {
-          setVerified(true);
-        } else {
-          setError("❌ 인증 실패: " + response.data.message);
-        }
+        setVerified(true);
+        alert(response.data); // 백엔드에서 반환한 메시지 보여주기 (예: "가게 방문 인증 완료! ...")
       } catch (err) {
         console.error(err);
         setError("서버 오류: 인증 불가");

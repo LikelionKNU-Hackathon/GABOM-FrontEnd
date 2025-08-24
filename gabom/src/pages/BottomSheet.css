@@ -7,35 +7,37 @@
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
-  transition: height 0.3s ease;
-  height: 180px; /* 기본 높이 줄임 */
+  transition: all 0.3s ease;
+  height: 180px; /* 기본 높이 */
   overflow: hidden;
   z-index: 100;
+  transform: translateY(0); /* 애니메이션용 */
 }
 
 .bottomSheet.expanded {
-  height: 420px; /* 확장 시 */
+  height: 420px;
+  overflow-y: auto; /* 확장 시 스크롤 허용 */
 }
 
 .dragHandle {
   width: 40px;
-  height: 3px;
+  height: 4px;
   background: #bbb;
   border-radius: 2px;
-  margin: 8px auto;
+  margin: 10px auto 14px;
 }
 
-/* ✅ 이름+카테고리+버튼 같은 줄 */
+/* 이름 + 카테고리 + 버튼 */
 .sheetHeader {
   display: flex;
-  justify-content: space-between; /* 양쪽 끝 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: space-between;
+  align-items: center;
   padding: 0 20px;
 }
 
 .storeTitle {
   display: flex;
-  align-items: center; /* baseline → center 로 수정 */
+  align-items: center;
   gap: 6px;
 }
 
@@ -52,12 +54,17 @@
 
 .verifyBtn {
   background-color: #ffb1b4;
-  color: #ffffff;
+  color: #fff;
   padding: 6px 14px;
   border-radius: 8px;
   border: none;
   font-size: 14px;
   cursor: pointer;
+  transition: background 0.2s;
+}
+
+.verifyBtn:hover {
+  background-color: #ff9aa0;
 }
 
 .sheetContent {
