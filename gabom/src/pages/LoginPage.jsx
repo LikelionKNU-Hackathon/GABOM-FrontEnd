@@ -40,20 +40,19 @@ export default function LoginPage() {
     try {
       const res = await axios.post(
         "https://gabom.shop/api/users/login",
-        { loginId: id, password }, // ✅ username → loginId
+        { loginId: id, password },
         { withCredentials: true }
       );
 
       // 성공 처리
       if (res.status === 200) {
         setMessage("로그인 성공!");
-        // 토큰 저장 (필요 시)
-        localStorage.setItem("token", res.data.accessToken);
+        // ✅ 토큰 저장 (accessToken 키로 통일)
+        localStorage.setItem("accessToken", res.data.accessToken);
         navigate("/main");
       }
     } catch (err) {
       console.error(err);
-
       const msg =
         err?.response?.data?.message ||
         "아이디 또는 비밀번호가 올바르지 않습니다.";
@@ -75,7 +74,6 @@ export default function LoginPage() {
         <h2 className="logintext">로그인</h2>
       </div>
 
-      {/* 폼 제출로만 로그인 실행 */}
       <form onSubmit={handleLogin}>
         <div className="inputbox">
           <div>
@@ -121,7 +119,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* ✅ 링크 없이 submit 버튼만 사용 */}
         <button className="LoginButton" type="submit" disabled={loading}>
           {loading ? "로그인 중..." : "로그인"}
         </button>

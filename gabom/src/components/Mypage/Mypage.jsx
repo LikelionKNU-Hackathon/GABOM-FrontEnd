@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Tier from "./Tier"; // ✅ 팝업 컴포넌트 불러오기
+import Tier from "./Tier";
 import styles from "./Mypage.module.css";
 
 import backIcon from "../../assets/icon/back.png";
@@ -9,13 +9,13 @@ import backIcon from "../../assets/icon/back.png";
 export default function Mypage() {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
-  const [showTier, setShowTier] = useState(false); // ✅ 티어 팝업 상태
+  const [showTier, setShowTier] = useState(false);
 
   // [1] 닉네임 불러오기
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken"); // ✅ accessToken 사용
         if (!token) {
           navigate("/login");
           return;
@@ -30,7 +30,7 @@ export default function Mypage() {
         console.error("사용자 정보 조회 실패", err);
         if (err.response?.status === 401) {
           alert("다시 로그인 해주세요.");
-          localStorage.removeItem("token");
+          localStorage.removeItem("accessToken"); // ✅ accessToken 삭제
           navigate("/login");
         }
       }
@@ -47,18 +47,23 @@ export default function Mypage() {
     if (!confirmed) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
+
       await axios.post(
         "https://gabom.shop/api/users/logout",
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      alert("로그아웃 되었습니다.");
     } catch (err) {
-      console.error("서버 로그아웃 실패 (무시 가능)", err);
+      console.error("서버 로그아웃 실패", err);
     } finally {
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken"); // ✅ accessToken 삭제
       localStorage.removeItem("user");
-      navigate("/");
+
+      // ✅ 로그인 페이지로 이동
+      navigate("/login");
     }
   };
 
@@ -99,7 +104,7 @@ export default function Mypage() {
         로그아웃
       </button>
 
-      {/* ✅ 티어 팝업 */}
+      {/* 티어 팝업 */}
       {showTier && <Tier onClose={() => setShowTier(false)} />}
     </div>
   );
