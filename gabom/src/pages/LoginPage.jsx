@@ -48,7 +48,7 @@ export default function LoginPage() {
       if (res.status === 200) {
         setMessage("로그인 성공!");
         // 토큰 저장 (필요 시)
-        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("token", res.data.accessToken);
         navigate("/main");
       }
     } catch (err) {
