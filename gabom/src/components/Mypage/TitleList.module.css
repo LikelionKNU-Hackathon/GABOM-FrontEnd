@@ -1,53 +1,10 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 80px;
-}
+/* 기존 스타일 그대로 두고 */
 
-/* 헤더 */
-.header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 15px;
-  position: fixed; 
-  top: 0;
-  left: 0;
-  background: #fff; 
-  z-index: 10; 
-}
-
-/* 뒤로가기 버튼 */
-.backBtn {
-  cursor: pointer;
-  width: 12px;
-  height: 24px;
-}
-
-/* 칭호 타이틀 */
-.title {
-  flex: 1;
-  text-align: center;
-  font-size: 22px;
-  font-weight: bold;
-}
-
-/* 칭호 리스트 */
-.titleList {
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  margin-top: 100px; 
-  gap: 10px;
-}
-
-/* 칭호 카드 */
 .titleItem {
   width: 358px;
   height: 80px;
   border-radius: 12px;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   background: white;
   display: flex;
   align-items: center;
@@ -56,15 +13,18 @@
   font-size: 18px;
   font-weight: bold;
   box-sizing: border-box;
-  cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* n/10 표시 */
-.titleCount {
-  font-size: 16px;
-  color: gray;
+/* 달성 칭호 */
+.collected {
+  border: 2px solid #ffb1b4;
+  background-color: #ffe6e7;
+  color: #000;
 }
 
-.titleCount.collected {
-  color: #ff8c94; 
+/* 미달성 칭호 */
+.notCollected {
+  opacity: 0.6; /* 흐리게 */
+  background-color: #f9f9f9;
 }
