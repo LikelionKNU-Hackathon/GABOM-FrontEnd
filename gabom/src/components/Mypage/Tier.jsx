@@ -1,18 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "./Tier.module.css";
 
 import logoImg from "../../assets/icon/logo_A.png";
 import closeIcon from "../../assets/icon/proicons_cancel.png";
 
-export default function Tier({ onClose, tierData }) {
-  const tiers = tierData || [
-    { name: "초행자", emoji: "🚶", number: 4, currentCount: 0 },
-    { name: "동네여행자", emoji: "🧍", number: 15, currentCount: 0 },
-    { name: "골목마스터", emoji: "🚴", number: 30, currentCount: 0 },
-    { name: "거리정복자", emoji: "🚗", number: 50, currentCount: 0 },
-    { name: "지역탐험가", emoji: "✈️", number: 90, currentCount: 0 },
-    { name: "전설의 가봄러", emoji: <img src={logoImg} alt="logo" className={styles.logo} />, number: 200, currentCount: 0 },
-  ];
+export default function Tier({ onClose }) {
+  const [tierData, setTierData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTier = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        const res = await axios.get("https://gabom.shop/api/users/me/tiers", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setTierData(res.data);
+      } catch (err) {
+        console.error("티어 불러오기 실패", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTier();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.popup}>불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (!tierData) {
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.popup}>데이터를 불러올 수 없습니다.</div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.overlay}>
@@ -24,24 +56,37 @@ export default function Tier({ onClose, tierData }) {
           onClick={onClose}
         />
 
+        <h3 style={{ textAlign: "center", margin: "10px 0" }}>
+          현재 티어: {tierData.currentTier}
+        </h3>
+
         <div className={styles.tierList}>
-          {tiers.map((tier, index) => {
-            // 초행자는 항상 색 적용, 나머지는 currentCount >= number
-            const reached = index === 0 || tier.currentCount >= tier.number;
+          {tierData.tierProgress.map((tier, index) => {
+            const reached = index === 0 || tier.achieved;
 
             return (
               <div
-                key={index}
-                className={`${styles.tierItem} ${reached ? styles.reached : ""}`}
+                key={tier.name}
+                className={`${styles.tierItem} ${
+                  reached ? styles.reached : ""
+                }`}
               >
                 <div className={styles.iconName}>
-                  <div className={`${styles.icon} ${reached ? styles.reached : ""}`}>
-                    {tier.emoji}
+                  <div
+                    className={`${styles.icon} ${
+                      reached ? styles.reached : ""
+                    }`}
+                  >
+                    {tier.name === "전설의 가봄러" ? (
+                      <img src={logoImg} alt="logo" className={styles.logo} />
+                    ) : (
+                      tier.emoji || "⭐"
+                    )}
                   </div>
                   <span className={styles.tierName}>{tier.name}</span>
                 </div>
                 <span className={styles.tierNumber}>
-                  {tier.currentCount}/{tier.number}
+                  {tier.current}/{tier.goal}
                 </span>
               </div>
             );
