@@ -147,7 +147,7 @@ export default function TitleList() {
                 </div>
               </div>
               <span className={styles.titleCount}>
-                {t.currentCount}/{t.goalCount}
+                {Math.min(Number(t.currentCount), t.goalCount)}/{t.goalCount}
               </span>
             </div>
           ))

@@ -61,22 +61,23 @@ export default function Tier({ onClose }) {
         </h3>
 
         <div className={styles.tierList}>
-          {tierData.tierProgress.map((tier, index) => {
-            const reached = index === 0 || tier.achieved;
+          {tierData.tierProgress.map((tier) => {
+            const ratio = Math.min(tier.current / tier.goal, 1);
+
+            // 0이면 흰색, 진행할수록 점점 진해짐
+            const bgColor =
+              tier.current === 0
+                ? "#FFFFFF"
+                : `rgba(255, 177, 180, ${0.2 + 0.8 * ratio})`;
 
             return (
               <div
                 key={tier.name}
-                className={`${styles.tierItem} ${
-                  reached ? styles.reached : ""
-                }`}
+                className={styles.tierItem}
+                style={{ backgroundColor: bgColor }}
               >
                 <div className={styles.iconName}>
-                  <div
-                    className={`${styles.icon} ${
-                      reached ? styles.reached : ""
-                    }`}
-                  >
+                  <div className={styles.icon}>
                     {tier.name === "전설의 가봄러" ? (
                       <img src={logoImg} alt="logo" className={styles.logo} />
                     ) : (
