@@ -18,7 +18,21 @@ export default function Stamp() {
       })
       .then((res) => {
         console.log("✅ 스탬프 불러오기 성공:", res.data);
-        setStamps(res.data); // 중복 포함해서 그냥 다 넣음
+
+        // 👉 count만큼 풀어서 배열 만들기
+        const expanded = [];
+        res.data.forEach((s) => {
+          for (let i = 0; i < s.count; i++) {
+            expanded.push({
+              stampId: s.stampId,
+              name: s.name,
+              category: s.category,
+              imageUrl: s.imageUrl,
+            });
+          }
+        });
+
+        setStamps(expanded);
       })
       .catch((err) => console.error("❌ 스탬프 불러오기 실패:", err));
   }, [token]);
@@ -39,7 +53,7 @@ export default function Stamp() {
         </button>
       </div>
 
-      {/* ✅ 스탬프 영역을 grid로 */}
+      {/* ✅ 격자 방식 */}
       <div className={styles.stampArea}>
         {stampsThisPage.map((s, idx) => (
           <img

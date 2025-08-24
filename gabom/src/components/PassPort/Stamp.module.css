@@ -32,9 +32,9 @@
 .stampArea {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3열 */
-  grid-template-rows: repeat(3, 1fr); /* 3행 */
-  gap: 12px; /* 칸 간격 */
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 12px;
   justify-items: center;
   align-items: center;
   background-color: #f9f9f9;
@@ -44,7 +44,7 @@
 .stampImage {
   width: 90px;
   height: 90px;
-  object-fit: contain; /* 이미지 짤림 방지 */
+  object-fit: contain;
 }
 
 .pageNav {
