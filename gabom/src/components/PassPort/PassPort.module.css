@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
 .header {
@@ -32,39 +31,31 @@
   display: flex;
   justify-content: center;
   margin: 40px 0;
-  width: 100%;
+  width: 380px;
 }
 
 .caseImage {
-  width: 60vw;               
-  max-width: 380px;         
-  aspect-ratio: 106 / 150;   
-  height: auto;              
+  width: 350px;
+  max-width: 380px;
+  aspect-ratio: 106 / 150;
+  height: auto;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
 }
 
-
 .caseBtn {
- position: fixed;
+  position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 40px);
+  width: 358px;
   height: 7vh;
   border-radius: 12px;
   border: none;
-  background-color: #FFE6E7;
-  color: #FFb1b4;
+  background-color: #ffe6e7;
+  color: #ffb1b4;
   font-size: 2vh;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* 반응형 */
-@media (max-width: 400px) {
-  .caseImage {
-    width: 80vw; 
-  }
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
