@@ -47,86 +47,86 @@ function MainPage() {
     });
   }, []);
 
-  const handleSearch = async (e) => {
-    if (e.key === "Enter" && keyword.trim() !== "") {
-      let results = [];
-      if (useMock) {
-        const mock = [
+  const handleSearch = async () => {
+    if (keyword.trim() === "") return;
+
+    let results = [];
+    if (useMock) {
+      const mock = [
+        {
+          id: 1,
+          name: "틈새라면 강남점",
+          category: "라면",
+          openingHours: "11:00 ~ 21:00",
+          address: "서울 강남구 어딘가 123",
+          latitude: 37.498,
+          longitude: 127.028,
+          topVisitor: { nickname: "철수", visitCount: 5 },
+          myVisit: { nickname: "길동이", visitCount: 2 },
+        },
+      ];
+      results = mock.filter(
+        (s) =>
+          s.name.includes(keyword) ||
+          s.category.includes(keyword) ||
+          s.address.includes(keyword)
+      );
+    } else {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          alert("로그인이 필요합니다.");
+          navigate("/login");
+          return;
+        }
+
+        const res = await axios.get(
+          `https://gabom.shop/api/stores/search?keyword=${keyword}`,
           {
-            id: 1,
-            name: "틈새라면 강남점",
-            category: "라면",
-            openingHours: "11:00 ~ 21:00",
-            address: "서울 강남구 어딘가 123",
-            latitude: 37.498,
-            longitude: 127.028,
-            topVisitor: { nickname: "철수", visitCount: 5 },
-            myVisit: { nickname: "길동이", visitCount: 2 },
-          },
-        ];
-        results = mock.filter(
-          (s) =>
-            s.name.includes(keyword) ||
-            s.category.includes(keyword) ||
-            s.address.includes(keyword)
-        );
-      } else {
-        try {
-          const token = localStorage.getItem("accessToken");
-          if (!token) {
-            alert("로그인이 필요합니다.");
-            navigate("/login");
-            return;
+            headers: { Authorization: `Bearer ${token}` },
           }
+        );
 
-          const res = await axios.get(
-            `https://gabom.shop/api/stores/search?keyword=${keyword}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-
-          results = res.data;
-        } catch (err) {
-          console.error("검색 실패:", err);
-          alert("검색 중 오류가 발생했습니다.");
-        }
+        results = res.data;
+      } catch (err) {
+        console.error("검색 실패:", err);
+        alert("검색 중 오류가 발생했습니다.");
       }
+    }
 
-      if (results && results.length > 0) {
-        const store = results[0];
-        setSelectedStore(store);
+    if (results && results.length > 0) {
+      const store = results[0];
+      setSelectedStore(store);
 
-        if (map) {
-          // 기존 마커 제거
-          markersRef.current.forEach((m) => m.setMap(null));
-          markersRef.current = [];
+      if (map) {
+        // 기존 마커 제거
+        markersRef.current.forEach((m) => m.setMap(null));
+        markersRef.current = [];
 
-          const markerImage = new window.kakao.maps.MarkerImage(
-            markerIcon,
-            new window.kakao.maps.Size(34, 53),
-            { offset: new window.kakao.maps.Point(20, 40) }
-          );
+        const markerImage = new window.kakao.maps.MarkerImage(
+          markerIcon,
+          new window.kakao.maps.Size(34, 53),
+          { offset: new window.kakao.maps.Point(20, 40) }
+        );
 
-          const marker = new window.kakao.maps.Marker({
-            map,
-            position: new window.kakao.maps.LatLng(
-              store.latitude,
-              store.longitude
-            ),
-            image: markerImage,
-          });
+        const marker = new window.kakao.maps.Marker({
+          map,
+          position: new window.kakao.maps.LatLng(
+            store.latitude,
+            store.longitude
+          ),
+          image: markerImage,
+        });
 
-          markersRef.current.push(marker);
+        markersRef.current.push(marker);
 
-          map.setCenter(
-            new window.kakao.maps.LatLng(store.latitude, store.longitude)
-          );
-        }
-      } else {
-        alert("검색 결과 없음");
-        setSelectedStore(null);
+        map.setCenter(
+          new window.kakao.maps.LatLng(store.latitude, store.longitude)
+        );
       }
+    } else {
+      alert("검색 결과 없음");
+      setSelectedStore(null);
     }
   };
 
@@ -158,14 +158,24 @@ function MainPage() {
               className="searchInput"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              onKeyDown={handleSearch}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()} // ✅ 엔터 입력
               autoFocus
             />
-            <img className="SearchImage" src={search} alt="검색" />
+            <img
+              className="SearchImage"
+              src={search}
+              alt="검색"
+              onClick={handleSearch} // ✅ 돋보기 클릭 시 검색
+            />
           </>
         ) : (
           <>
-            <img className="SearchImage" src={search} alt="검색" />
+            <img
+              className="SearchImage"
+              src={search}
+              alt="검색"
+              onClick={handleSearch} // ✅ 돋보기 클릭 시 검색
+            />
             <input
               id="searchInput"
               type="text"
@@ -174,7 +184,7 @@ function MainPage() {
               value={keyword}
               onFocus={() => setIsSearching(true)}
               onChange={(e) => setKeyword(e.target.value)}
-              onKeyDown={handleSearch}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()} // ✅ 엔터 입력
             />
           </>
         )}
