@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PassPort.module.css";
-import backIcon from "../../assets/icon/back.png";
+import backIcon from "../../assets/icon/back.svg";
 import defaultCase from "../../assets/case/cherryblossom_2.png";
 import axios from "axios";
 

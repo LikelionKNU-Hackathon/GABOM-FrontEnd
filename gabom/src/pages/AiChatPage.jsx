@@ -5,7 +5,7 @@ import "./AiChatPage.css";
 // 이미지 import
 import BackIcon from "../images/back.svg";
 import ChatLogo from "../images/logo.png";
-import SendIcon from "../images/send.png"; // 종이비행기 아이콘
+import SendIcon from "../images/send.svg"; // 종이비행기 아이콘
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([]);

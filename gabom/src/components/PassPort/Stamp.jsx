@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Stamp.module.css";
-import backIcon from "../../assets/icon/back.png";
+import backIcon from "../../assets/icon/back.svg";
 import axios from "axios";
 
 export default function Stamp() {

@@ -4,7 +4,7 @@ import axios from "axios";
 import Tier from "./Tier";
 import styles from "./Mypage.module.css";
 
-import backIcon from "../../assets/icon/back.png";
+import backIcon from "../../assets/icon/back.svg";
 
 export default function Mypage() {
   const navigate = useNavigate();

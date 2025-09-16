@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./Title.module.css";
-import backIcon from "../../assets/icon/back.png";
+import backIcon from "../../assets/icon/back.svg";
 
 export default function Title() {
   const navigate = useNavigate();
