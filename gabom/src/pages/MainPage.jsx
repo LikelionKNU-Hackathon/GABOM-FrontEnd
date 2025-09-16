@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import "./MainPage.css";
 import search from "../images/search.png";
 import backIconPink from "../images/back_pink.png";
-import chat from "../images/chat.png";
-import passport from "../images/passport.png";
-import camera from "../images/camera.png";
-import rank from "../images/rank.png";
+import chat from "../images/aichat.svg";
+import passport from "../images/stamp.svg";
+import camera from "../images/qrscan.svg";
+import rank from "../images/ranking.svg";
 import mypage from "../images/user.svg";
 import markerIcon from "../images/pinbig.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -203,25 +203,21 @@ function MainPage() {
         <div className="tabItem">
           <Link to="/aichat">
             <img className="ChatImage" src={chat} alt="채팅" />
-            AI 채팅
           </Link>
         </div>
         <div className="tabItem">
           <Link to="/PassPort">
             <img className="StampImage" src={passport} alt="스탬프" />
-            스탬프
           </Link>
         </div>
         <div className="tabItem">
           <Link to="/camera">
             <img className="CameraImage" src={camera} alt="카메라" />
-            카메라
           </Link>
         </div>
         <div className="tabItem">
           <Link to="/rank">
             <img className="RankImage" src={rank} alt="랭킹" />
-            랭킹
           </Link>
         </div>
         <div className="tabItem">
