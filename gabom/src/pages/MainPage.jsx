@@ -6,7 +6,7 @@ import chat from "../images/chat.png";
 import passport from "../images/passport.png";
 import camera from "../images/camera.png";
 import rank from "../images/rank.png";
-import mypage from "../images/mypage.png";
+import mypage from "../images/user.svg";
 import markerIcon from "../images/pinbig.png";
 import { Link, useNavigate } from "react-router-dom";
 import BottomSheet from "./BottomSheet";
@@ -227,7 +227,6 @@ function MainPage() {
         <div className="tabItem">
           <Link to="/Mypage">
             <img className="MyPageImage" src={mypage} alt="마이페이지" />
-            마이페이지
           </Link>
         </div>
       </div>
