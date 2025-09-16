@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./MainPage.css";
-import search from "../images/search.png";
-import backIconPink from "../images/back_pink.png";
+import search from "../images/search.svg";
+import backIconPink from "../images/back_pink.svg";
 import chat from "../images/aichat.svg";
 import passport from "../images/stamp.svg";
 import camera from "../images/qrscan.svg";

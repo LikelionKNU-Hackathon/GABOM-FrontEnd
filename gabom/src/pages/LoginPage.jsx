@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
-import back from "../images/back.png";
+import back from "../images/back.svg";
 
 export default function LoginPage() {
   const [id, setId] = useState("");

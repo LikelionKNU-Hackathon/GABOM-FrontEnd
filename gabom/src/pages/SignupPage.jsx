@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import back from "../images/back.png";
+import back from "../images/back.svg";
 import eye from "../images/fluenteye.png";
 import "./SignupPage.css";
 

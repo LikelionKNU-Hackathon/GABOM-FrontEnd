@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AiChatPage.css";
 
 // 이미지 import
-import BackIcon from "../images/back.png";
+import BackIcon from "../images/back.svg";
 import ChatLogo from "../images/logo.png";
 import SendIcon from "../images/send.png"; // 종이비행기 아이콘
 

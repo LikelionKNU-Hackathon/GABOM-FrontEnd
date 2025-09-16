@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import backimage from "../images/back.png";
+import backimage from "../images/back.svg";
 import "./RankPage.css";
 
 const USE_MOCK = false;
