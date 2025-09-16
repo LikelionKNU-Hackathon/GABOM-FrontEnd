@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../images/logo_A.png";
+import logo from "../images/logo_A.svg";
 import "./StartPage.css";
 
 export default function StartPage() {
