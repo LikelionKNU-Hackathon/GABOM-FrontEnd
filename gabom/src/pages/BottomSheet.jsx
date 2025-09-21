@@ -55,7 +55,7 @@ export default function BottomSheet({ store }) {
       const res = await axios.get(
         `https://gabom.shop/api/stores/${store.id}/reviews`,
         {
-          params: { page: 0, size: 10 },
+          params: { page: 0, size: 50000 },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
       );
@@ -244,7 +244,11 @@ export default function BottomSheet({ store }) {
                       <div className="reviewHeader">
                         <p className="reviewAuthor">{r.nickname}</p>
                         <span className="reviewDate">
-                          {new Date(r.createdAt).toLocaleString()}
+                          {new Date(r.createdAt).toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })}
                         </span>
                       </div>
                       <p className="reviewText">{r.content}</p>
