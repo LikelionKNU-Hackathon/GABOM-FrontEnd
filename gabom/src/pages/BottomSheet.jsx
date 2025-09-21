@@ -9,11 +9,13 @@ import "./BottomSheet.css";
 export default function BottomSheet({ store }) {
   const [expanded, setExpanded] = useState(false);
   const [detail, setDetail] = useState(null);
-  const [reviews, setReviews] = useState([]); // 리뷰 목록
+  const [reviews, setReviews] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
   const [review, setReview] = useState("");
+
   const startY = useRef(0);
   const currentY = useRef(0);
+  const isDragging = useRef(false);
   const navigate = useNavigate();
 
   // ✅ 가게 상세 조회
@@ -56,17 +58,31 @@ export default function BottomSheet({ store }) {
     }
   };
 
-  // ✅ dragHandle 전용 제스처
+  // ✅ dragHandle 전용 제스처 (상단 50px만 반응)
   const handleTouchStart = (e) => {
-    startY.current = e.touches[0].clientY;
+    const touchY = e.touches[0].clientY;
+    const elementTop = e.currentTarget.getBoundingClientRect().top;
+
+    if (touchY - elementTop < 50) {
+      startY.current = touchY;
+      isDragging.current = true;
+    } else {
+      isDragging.current = false;
+    }
   };
+
   const handleTouchMove = (e) => {
+    if (!isDragging.current) return;
     currentY.current = e.touches[0].clientY;
   };
+
   const handleTouchEnd = () => {
+    if (!isDragging.current) return;
+
     if (!expanded && startY.current - currentY.current > 50) {
       setExpanded(true);
     }
+    isDragging.current = false;
   };
 
   // ✅ 닫기
@@ -94,43 +110,27 @@ export default function BottomSheet({ store }) {
         }
       );
 
-      setReview(""); // 입력창 초기화
-      fetchReviews(); // ✅ 등록 후 최신 리뷰 다시 불러오기
+      setReview("");
+      fetchReviews();
     } catch (err) {
       console.error("리뷰 등록 실패:", err);
       alert("리뷰 등록 중 오류가 발생했습니다.");
     }
   };
 
-  // ✅ 작성 시간 포맷 (YYYY-MM-DD HH:mm)
-  const formatDateTime = (dateTime) => {
-    if (!dateTime) return "";
-    const date = new Date(dateTime);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(date.getDate()).padStart(2, "0")} ${String(
-      date.getHours()
-    ).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-  };
-
   if (!store) return null;
 
   return (
-    <div className={`bottomSheet ${expanded ? "expanded" : ""}`}>
-      {/* 드래그 핸들 */}
-      {!expanded && (
-        <div
-          className="dragHandle"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        />
-      )}
-
+    <div
+      className={`bottomSheet ${expanded ? "expanded" : ""}`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* 축소 상태 */}
       {!expanded && detail && (
         <div className="collapsedContent">
+          <div className="dragHandle" /> {/* 시각적으로 상단바 유지 */}
           <div className="storeInfoBlock">
             <div className="storeInfoText">
               <h2 className="storeName">{store.name}</h2>
@@ -171,7 +171,7 @@ export default function BottomSheet({ store }) {
               </button>
             </div>
 
-            {/* AI 한줄 요약 */}
+            {/* AI 요약 */}
             <div className="aiSummary">
               <img src={aisummaryicon} alt="ai요약" />
               <span>AI 한줄 요약: {detail?.aiSummary || ""}</span>
@@ -199,6 +199,7 @@ export default function BottomSheet({ store }) {
             {/* 홈 */}
             {activeTab === "home" && (
               <>
+                {/* 카드 */}
                 <div className="card">
                   <div className="cardLeft">
                     <span className="icon">🏆</span>
@@ -260,9 +261,9 @@ export default function BottomSheet({ store }) {
                   reviews.map((r) => (
                     <div key={r.id} className="reviewItem">
                       <div className="reviewHeader">
-                        <span className="reviewAuthor">{r.nickname}</span>
-                        <span className="reviewDate">
-                          {formatDateTime(r.createdAt)}
+                        <p className="reviewAuthor">{r.nickname}</p>
+                        <span className="reviewTime">
+                          {new Date(r.createdAt).toLocaleString()}
                         </span>
                       </div>
                       <p className="reviewText">{r.content}</p>
