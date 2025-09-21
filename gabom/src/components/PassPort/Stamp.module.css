@@ -1,59 +1,66 @@
+/* src/components/PassPort/Stamp.module.css */
+
 .stampContainer {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  position: relative;
-  background-color: #fff;
+  background-color: #f9f9f9; /* 헤더와 스탬프 영역 배경 통일 */
 }
 
 /* 헤더 */
 .header {
   width: 100%;
-  height: 100px;
+  height: 80px; /* 기존보다 살짝 낮게 */
   display: flex;
   align-items: center;
   padding: 0 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
   flex-shrink: 0;
+  box-shadow: none; /* 그림자 제거 */
 }
 
 .backBtn {
   background: none;
   border: none;
+  width: 12px;
+  height: 24px;
+  margin-top: 10px;
   cursor: pointer;
 }
 
 .backBtn img {
-  cursor: pointer;
   width: 12px;
   height: 24px;
 }
 
+/* 스탬프 격자 */
 .stampArea {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 12px;
+  gap: 8px;              /* 간격 줄임 */
   justify-items: center;
   align-items: center;
   background-color: #f9f9f9;
-  padding: 20px;
+  padding: 5px 10px;      /* 패딩 줄여서 위쪽 공간 줄임 */
+  margin-top: 5px;    
 }
 
 .stampImage {
-  width: 90px;
-  height: 90px;
+  width: 120px;           /* 기존 100px -> 조금 더 크게 */
+  height: 120px;          /* 기존 100px -> 조금 더 크게 */
   object-fit: contain;
 }
 
+/* 페이지 네비게이션 */
 .pageNav {
-  height: 60px;
+  height: 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .pageNav button {
@@ -78,8 +85,8 @@
 
 @media (max-width: 400px) {
   .stampImage {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
   }
   .pageNav button {
     padding: 6px 12px;

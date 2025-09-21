@@ -2,18 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
-import back from "../images/back.svg";
+import logoA from "../assets/icon/logo_A.png"; // 로고 경로
 
-export default function LoginPage() {
+export default function MainPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [saveId, setSaveId] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  // 뒤로가기(시작 화면)
-  const handlestart = () => navigate("/");
 
   // 처음 로드 시 저장된 아이디 불러오기
   useEffect(() => {
@@ -44,10 +41,8 @@ export default function LoginPage() {
         { withCredentials: true }
       );
 
-      // 성공 처리
       if (res.status === 200) {
         setMessage("로그인 성공!");
-        // ✅ 토큰 저장 (accessToken 키로 통일)
         localStorage.setItem("accessToken", res.data.accessToken);
         navigate("/main");
       }
@@ -64,16 +59,12 @@ export default function LoginPage() {
 
   return (
     <div className="LoginPageContainer">
-      <div className="loginheader">
-        <img
-          className="BackImage1"
-          onClick={handlestart}
-          src={back}
-          alt="뒤로"
-        />
-        <h2 className="logintext">로그인</h2>
+      {/* 로고 */}
+      <div className="logo-container">
+        <img src={logoA} alt="로고" className="logoA" />
       </div>
 
+      {/* 로그인 폼 */}
       <form onSubmit={handleLogin}>
         <div className="inputbox">
           <div>
@@ -126,9 +117,24 @@ export default function LoginPage() {
 
       {message && <p>{message}</p>}
 
-      <Link to="/signup">
-        <button className="SignupButton1">회원가입</button>
-      </Link>
+      {/* 회원가입 안내 - 각각 한 줄 */}
+      <div className="signup-links">
+        <span className="signup-text">
+          아직 회원이 아니신가요?{" "}
+          <Link to="/signup" className="signup-link">
+            회원가입하기
+          </Link>
+        </span>
+      </div>
+
+      <div className="signup-links">
+        <span className="signup-text">
+          가봄의 사장님이 되고 싶으신가요?{" "}
+          <Link to="/ownersignup" className="signup-link">
+            가봄 사장님 되기
+          </Link>
+        </span>
+      </div>
     </div>
   );
 }
