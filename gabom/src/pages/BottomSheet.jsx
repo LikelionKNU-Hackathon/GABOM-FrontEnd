@@ -38,7 +38,7 @@ export default function BottomSheet({ store }) {
     fetchDetail();
   }, [store]);
 
-  // ✅ 리뷰 조회 (리뷰 탭 눌렀을 때 실행)
+  // ✅ 리뷰 조회
   const fetchReviews = async () => {
     if (!store || !store.id) return;
     try {
@@ -46,7 +46,7 @@ export default function BottomSheet({ store }) {
       const res = await axios.get(
         `https://gabom.shop/api/stores/${store.id}/reviews`,
         {
-          params: { page: 0, size: 10 }, // ✅ 안전하게 쿼리 붙이기
+          params: { page: 0, size: 10 },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
       );
@@ -102,11 +102,23 @@ export default function BottomSheet({ store }) {
     }
   };
 
+  // ✅ 작성 시간 포맷 (YYYY-MM-DD HH:mm)
+  const formatDateTime = (dateTime) => {
+    if (!dateTime) return "";
+    const date = new Date(dateTime);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(date.getDate()).padStart(2, "0")} ${String(
+      date.getHours()
+    ).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+  };
+
   if (!store) return null;
 
   return (
     <div className={`bottomSheet ${expanded ? "expanded" : ""}`}>
-      {/* 드래그 핸들 (축소 상태에서만 보임) */}
+      {/* 드래그 핸들 */}
       {!expanded && (
         <div
           className="dragHandle"
@@ -159,7 +171,7 @@ export default function BottomSheet({ store }) {
               </button>
             </div>
 
-            {/* ✅ AI 한줄 요약 */}
+            {/* AI 한줄 요약 */}
             <div className="aiSummary">
               <img src={aisummaryicon} alt="ai요약" />
               <span>AI 한줄 요약: {detail?.aiSummary || ""}</span>
@@ -177,7 +189,7 @@ export default function BottomSheet({ store }) {
                 className={activeTab === "review" ? "active" : ""}
                 onClick={() => {
                   setActiveTab("review");
-                  fetchReviews(); // ✅ 리뷰 탭 클릭 시 조회 실행
+                  fetchReviews();
                 }}
               >
                 리뷰
@@ -247,7 +259,12 @@ export default function BottomSheet({ store }) {
                 {reviews.length > 0 ? (
                   reviews.map((r) => (
                     <div key={r.id} className="reviewItem">
-                      <p className="reviewAuthor">{r.nickname}</p>
+                      <div className="reviewHeader">
+                        <span className="reviewAuthor">{r.nickname}</span>
+                        <span className="reviewDate">
+                          {formatDateTime(r.createdAt)}
+                        </span>
+                      </div>
                       <p className="reviewText">{r.content}</p>
                     </div>
                   ))
