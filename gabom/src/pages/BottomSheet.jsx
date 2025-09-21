@@ -12,11 +12,18 @@ export default function BottomSheet({ store }) {
   const [reviews, setReviews] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
   const [review, setReview] = useState("");
-
   const startY = useRef(0);
   const currentY = useRef(0);
-  const isDragging = useRef(false);
   const navigate = useNavigate();
+
+  // ✅ mount 후 transition 켜기
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const el = document.querySelector(".bottomSheet");
+      if (el) el.classList.add("animated");
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   // ✅ 가게 상세 조회
   useEffect(() => {
@@ -58,58 +65,35 @@ export default function BottomSheet({ store }) {
     }
   };
 
-  // ✅ dragHandle 전용 제스처 (상단 50px만 반응)
+  // ✅ dragHandle 전용 제스처
   const handleTouchStart = (e) => {
-    const touchY = e.touches[0].clientY;
-    const elementTop = e.currentTarget.getBoundingClientRect().top;
-
-    if (touchY - elementTop < 50) {
-      startY.current = touchY;
-      isDragging.current = true;
-    } else {
-      isDragging.current = false;
-    }
+    startY.current = e.touches[0].clientY;
   };
-
   const handleTouchMove = (e) => {
-    if (!isDragging.current) return;
     currentY.current = e.touches[0].clientY;
   };
-
   const handleTouchEnd = () => {
-    if (!isDragging.current) return;
-
     if (!expanded && startY.current - currentY.current > 50) {
       setExpanded(true);
     }
-    isDragging.current = false;
   };
 
-  // ✅ 닫기
-  const handleClose = () => {
-    setExpanded(false);
-  };
+  const handleClose = () => setExpanded(false);
 
-  // ✅ 인증하기
   const handleVerifyClick = (e) => {
     e.stopPropagation();
     navigate("/camera");
   };
 
-  // ✅ 리뷰 등록
   const handleReviewSubmit = async () => {
     if (!review.trim()) return;
-
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
         `https://gabom.shop/api/stores/${store.id}/reviews`,
         { content: review },
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
       );
-
       setReview("");
       fetchReviews();
     } catch (err) {
@@ -121,16 +105,21 @@ export default function BottomSheet({ store }) {
   if (!store) return null;
 
   return (
-    <div
-      className={`bottomSheet ${expanded ? "expanded" : ""}`}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* 축소 상태 */}
+    <div className={`bottomSheet ${expanded ? "expanded" : ""}`}>
+      {!expanded && (
+        <div
+          className="dragHandle"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="dragHandleTouchArea"></div>{" "}
+          {/* 실제 터치 인식 범위 */}
+        </div>
+      )}
+
       {!expanded && detail && (
         <div className="collapsedContent">
-          <div className="dragHandle" /> {/* 시각적으로 상단바 유지 */}
           <div className="storeInfoBlock">
             <div className="storeInfoText">
               <h2 className="storeName">{store.name}</h2>
@@ -145,7 +134,6 @@ export default function BottomSheet({ store }) {
         </div>
       )}
 
-      {/* 확장 상태 */}
       {expanded && detail && (
         <>
           <div className="modalHeader">
@@ -158,7 +146,6 @@ export default function BottomSheet({ store }) {
           </div>
 
           <div className="sheetContent">
-            {/* 가게 정보 */}
             <div className="storeInfoBlock">
               <div className="storeInfoText">
                 <h2 className="storeName">{store.name}</h2>
@@ -171,13 +158,11 @@ export default function BottomSheet({ store }) {
               </button>
             </div>
 
-            {/* AI 요약 */}
             <div className="aiSummary">
               <img src={aisummaryicon} alt="ai요약" />
               <span>AI 한줄 요약: {detail?.aiSummary || ""}</span>
             </div>
 
-            {/* 탭 */}
             <div className="tabs">
               <button
                 className={activeTab === "home" ? "active" : ""}
@@ -196,10 +181,8 @@ export default function BottomSheet({ store }) {
               </button>
             </div>
 
-            {/* 홈 */}
             {activeTab === "home" && (
               <>
-                {/* 카드 */}
                 <div className="card">
                   <div className="cardLeft">
                     <span className="icon">🏆</span>
@@ -238,7 +221,6 @@ export default function BottomSheet({ store }) {
                   </div>
                 </div>
 
-                {/* 리뷰 작성 */}
                 <div className="reviewBox">
                   <p className="reviewLabel">리뷰 작성</p>
                   <textarea
@@ -254,7 +236,6 @@ export default function BottomSheet({ store }) {
               </>
             )}
 
-            {/* 리뷰 */}
             {activeTab === "review" && (
               <div className="reviewList">
                 {reviews.length > 0 ? (
@@ -262,7 +243,7 @@ export default function BottomSheet({ store }) {
                     <div key={r.id} className="reviewItem">
                       <div className="reviewHeader">
                         <p className="reviewAuthor">{r.nickname}</p>
-                        <span className="reviewTime">
+                        <span className="reviewDate">
                           {new Date(r.createdAt).toLocaleString()}
                         </span>
                       </div>

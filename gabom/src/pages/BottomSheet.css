@@ -3,19 +3,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 100vh; /* 전체 화면 크기 확보 */
   background: #fff;
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  transform: translateY(80%); /* 축소 상태: 아래쪽으로 숨김 */
-  z-index: 100;
+  transition: none; /* ✅ 기본적으로 애니메이션 없음 */
+  height: 180px;
   overflow: hidden;
+  z-index: 100;
 }
-
+.bottomSheet.animated {
+  transition: all 0.3s ease; /* ✅ mount 후에만 애니메이션 켜짐 */
+}
 .bottomSheet.expanded {
-  transform: translateY(0); /* 확장 상태: 위로 올라옴 */
+  top: 0;
+  height: 100vh;
   border-radius: 0;
   overflow-y: auto;
 }
@@ -26,7 +28,17 @@
   height: 4px;
   background: #bbb;
   border-radius: 2px;
-  margin: 4px auto;
+  margin: 6px auto; /* 위쪽 여백 줄여서 더 붙게 */
+  position: relative;
+}
+
+/* 보이지 않지만 터치 영역 확장 */
+.dragHandleTouchArea {
+  position: absolute;
+  top: -10px; /* 위로 10px 확장 */
+  left: -50px; /* 좌측 확장 */
+  right: -50px; /* 우측 확장 */
+  bottom: -50px; /* 아래로 확장 */
 }
 
 /* 헤더 (확장 상태) */
