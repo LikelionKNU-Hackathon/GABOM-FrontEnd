@@ -9,32 +9,54 @@ import "./BottomSheet.css";
 export default function BottomSheet({ store }) {
   const [expanded, setExpanded] = useState(false);
   const [detail, setDetail] = useState(null);
+  const [reviews, setReviews] = useState([]); // 리뷰 목록
   const [activeTab, setActiveTab] = useState("home");
   const [review, setReview] = useState("");
   const startY = useRef(0);
   const currentY = useRef(0);
   const navigate = useNavigate();
 
+  // ✅ 가게 상세 조회
   useEffect(() => {
-    if (!store) return;
+    if (!store || !store.id) return;
+
     const fetchDetail = async () => {
       try {
         const token = localStorage.getItem("accessToken");
         const res = await axios.get(
           `https://gabom.shop/api/stores/${store.id}`,
-          token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          }
         );
         setDetail(res.data);
       } catch (err) {
         console.error("가게 상세 불러오기 실패:", err);
       }
     };
+
     fetchDetail();
   }, [store]);
 
-  if (!store) return null;
+  // ✅ 리뷰 조회 (리뷰 탭 눌렀을 때 실행)
+  const fetchReviews = async () => {
+    if (!store || !store.id) return;
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await axios.get(
+        `https://gabom.shop/api/stores/${store.id}/reviews`,
+        {
+          params: { page: 0, size: 10 }, // ✅ 안전하게 쿼리 붙이기
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+      setReviews(res.data);
+    } catch (err) {
+      console.error("리뷰 불러오기 실패:", err);
+    }
+  };
 
-  /** ✅ dragHandle 전용 제스처 */
+  // ✅ dragHandle 전용 제스처
   const handleTouchStart = (e) => {
     startY.current = e.touches[0].clientY;
   };
@@ -47,21 +69,40 @@ export default function BottomSheet({ store }) {
     }
   };
 
-  /** ✅ 닫기 */
+  // ✅ 닫기
   const handleClose = () => {
     setExpanded(false);
   };
 
+  // ✅ 인증하기
   const handleVerifyClick = (e) => {
     e.stopPropagation();
     navigate("/camera");
   };
 
-  const handleReviewSubmit = () => {
+  // ✅ 리뷰 등록
+  const handleReviewSubmit = async () => {
     if (!review.trim()) return;
-    console.log("리뷰 등록:", review);
-    setReview("");
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      await axios.post(
+        `https://gabom.shop/api/stores/${store.id}/reviews`,
+        { content: review },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+
+      setReview(""); // 입력창 초기화
+      fetchReviews(); // ✅ 등록 후 최신 리뷰 다시 불러오기
+    } catch (err) {
+      console.error("리뷰 등록 실패:", err);
+      alert("리뷰 등록 중 오류가 발생했습니다.");
+    }
   };
+
+  if (!store) return null;
 
   return (
     <div className={`bottomSheet ${expanded ? "expanded" : ""}`}>
@@ -76,7 +117,7 @@ export default function BottomSheet({ store }) {
       )}
 
       {/* 축소 상태 */}
-      {!expanded && (
+      {!expanded && detail && (
         <div className="collapsedContent">
           <div className="storeInfoBlock">
             <div className="storeInfoText">
@@ -93,7 +134,7 @@ export default function BottomSheet({ store }) {
       )}
 
       {/* 확장 상태 */}
-      {expanded && (
+      {expanded && detail && (
         <>
           <div className="modalHeader">
             <button className="backBtn" onClick={handleClose}>
@@ -117,6 +158,7 @@ export default function BottomSheet({ store }) {
                 인증하기
               </button>
             </div>
+
             {/* ✅ AI 한줄 요약 */}
             <div className="aiSummary">
               <img src={aisummaryicon} alt="ai요약" />
@@ -133,7 +175,10 @@ export default function BottomSheet({ store }) {
               </button>
               <button
                 className={activeTab === "review" ? "active" : ""}
-                onClick={() => setActiveTab("review")}
+                onClick={() => {
+                  setActiveTab("review");
+                  fetchReviews(); // ✅ 리뷰 탭 클릭 시 조회 실행
+                }}
               >
                 리뷰
               </button>
@@ -199,10 +244,10 @@ export default function BottomSheet({ store }) {
             {/* 리뷰 */}
             {activeTab === "review" && (
               <div className="reviewList">
-                {detail?.reviews && detail.reviews.length > 0 ? (
-                  detail.reviews.map((r, i) => (
-                    <div key={i} className="reviewItem">
-                      <p className="reviewAuthor">{r.author}</p>
+                {reviews.length > 0 ? (
+                  reviews.map((r) => (
+                    <div key={r.id} className="reviewItem">
+                      <p className="reviewAuthor">{r.nickname}</p>
                       <p className="reviewText">{r.content}</p>
                     </div>
                   ))
