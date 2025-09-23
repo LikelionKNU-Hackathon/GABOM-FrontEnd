@@ -17,7 +17,7 @@ export default function Mypage() {
       try {
         const token = localStorage.getItem("accessToken"); // ✅ accessToken 사용
         if (!token) {
-          navigate("/login");
+          navigate("/");
           return;
         }
 
@@ -31,7 +31,7 @@ export default function Mypage() {
         if (err.response?.status === 401) {
           alert("다시 로그인 해주세요.");
           localStorage.removeItem("accessToken"); // ✅ accessToken 삭제
-          navigate("/login");
+          navigate("/");
         }
       }
     };
@@ -63,7 +63,7 @@ export default function Mypage() {
       localStorage.removeItem("user");
 
       // ✅ 로그인 페이지로 이동
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -75,7 +75,7 @@ export default function Mypage() {
           src={backIcon}
           alt="뒤로가기"
           className={styles.backBtn}
-          onClick={() => navigate("/Main")}
+          onClick={() => navigate("/main")}
         />
         <h1 className={styles.title}>마이페이지</h1>
       </div>

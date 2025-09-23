@@ -34,7 +34,7 @@ export default function UserInfo() {
       } catch (err) {
         console.error("회원정보 불러오기 실패", err);
         alert("회원정보를 불러오지 못했습니다. 다시 로그인해주세요.");
-        navigate("/login");
+        navigate("/");
       }
     };
 
@@ -57,7 +57,7 @@ export default function UserInfo() {
       );
 
       alert("회원정보가 수정되었습니다.");
-      navigate(-1); // 이전 페이지로
+      navigate("/mypage"); // 이전 페이지로
     } catch (err) {
       console.error("회원정보 수정 실패", err);
       alert("회원정보 수정 중 오류가 발생했습니다.");
