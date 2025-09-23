@@ -24,7 +24,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleBack = () => navigate("/login");
+  const handleBack = () => navigate("/");
 
   // 공통 GET /check 호출자
   const requestDuplicateCheck = async (type, value) => {
@@ -98,7 +98,7 @@ export default function SignupPage() {
 
       // ✅ 서버가 200 OK 주면 성공 처리
       alert(res.data?.message || "회원가입 성공! 로그인 페이지로 이동합니다.");
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       console.error(err);
 

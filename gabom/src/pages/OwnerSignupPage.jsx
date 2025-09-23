@@ -6,8 +6,8 @@ import eye from "../images/fluenteye.png";
 import "./OwnerSignupPage.css";
 
 export default function OwnerSignupPage() {
-  const [storeId, setStoreId] = useState("");
-  const [loginId, setLoginId] = useState("");
+  const [storeId, setStoreId] = useState(""); 
+  const [loginId, setLoginId] = useState(""); 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,16 +17,28 @@ export default function OwnerSignupPage() {
 
   const handleSignup = (e) => {
     e.preventDefault();
+
     if (!storeId.trim() || !loginId.trim() || !password || !email.trim()) {
       return alert("모든 필드를 입력하세요.");
     }
-    alert("회원가입 완료!");
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return alert("이메일 형식을 확인해주세요.");
+    }
+
+    alert("회원가입 성공! 로그인 페이지로 이동합니다.");
+    navigate("/"); 
   };
 
   return (
     <div className="SignupPageContainer">
       <div className="signupheader">
-        <img className="BackImage2" onClick={handleBack} src={back} alt="뒤로" />
+        <img
+          className="BackImage2"
+          onClick={handleBack}
+          src={back}
+          alt="뒤로"
+        />
         <h2 className="signuptext">회원가입</h2>
       </div>
 
@@ -45,7 +57,7 @@ export default function OwnerSignupPage() {
           </div>
         </div>
 
-        {/* 아이디 */}
+        {/* 로그인 아이디 */}
         <div className="box">
           <p className="text">아이디</p>
           <div className="inputWrapper">
@@ -68,6 +80,7 @@ export default function OwnerSignupPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder="비밀번호를 입력하세요"
             />
             <img
               className="fluenteye"
