@@ -12,6 +12,7 @@ import CaseBox from "./components/PassPort/CaseBox";
 import Stamp from "./components/PassPort/Stamp";
 import CameraPage from "./pages/CameraPage";
 import RankPage from "./pages/RankPage";
+import OwnerPage from "./pages/OwnerPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 import Mypage from "./components/Mypage/Mypage";
@@ -35,6 +36,7 @@ function App() {
         <Route path="/Stamp" element={<Stamp />} />
         <Route path="/camera" element={<CameraPage />} />
         <Route path="/rank" element={<RankPage />} />
+        <Route path="/owner" element={<OwnerPage />} />
         {/* 마이페이지 관련 */}
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/userinfo" element={<UserInfo />} />

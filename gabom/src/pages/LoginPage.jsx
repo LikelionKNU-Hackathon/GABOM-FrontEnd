@@ -35,16 +35,39 @@ export default function MainPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "https://gabom.shop/api/users/login",
-        { loginId: id, password },
-        { withCredentials: true }
-      );
+      let res;
+      try {
+        // 일반 유저 로그인 시도
+        res = await axios.post(
+          "https://gabom.shop/api/users/login",
+          { loginId: id, password },
+          { withCredentials: true }
+        );
+      } catch (userErr) {
+        // 실패 시 사장님 로그인 시도
+        res = await axios.post(
+          "https://gabom.shop/api/owners/login",
+          { loginId: id, password },
+          { withCredentials: true }
+        );
+      }
 
       if (res.status === 200) {
+        const { accessToken, role } = res.data;
+
+        // 토큰 & 역할 저장
+        localStorage.setItem("accessToken", accessToken);
+        if (role) {
+          localStorage.setItem("role", role);
+        }
+
         setMessage("로그인 성공!");
-        localStorage.setItem("accessToken", res.data.accessToken);
-        navigate("/main");
+
+        if (role === "OWNER") {
+          navigate("/owner-dashboard"); // ✅ 사장님(관리자) 페이지
+        } else {
+          navigate("/main"); // ✅ 일반 유저 페이지
+        }
       }
     } catch (err) {
       console.error(err);
@@ -117,7 +140,7 @@ export default function MainPage() {
 
       {message && <p>{message}</p>}
 
-      {/* 회원가입 안내 - 각각 한 줄 */}
+      {/* 회원가입 안내 */}
       <div className="signup-links">
         <span className="signup-text">
           아직 회원이 아니신가요?{" "}
