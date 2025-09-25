@@ -4,7 +4,7 @@ import axios from "axios";
 import "./LoginPage.css";
 import logoA from "../assets/icon/logo_A.png"; // 로고 경로
 
-export default function MainPage() {
+export default function LoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [saveId, setSaveId] = useState(false);
@@ -53,20 +53,31 @@ export default function MainPage() {
       }
 
       if (res.status === 200) {
-        const { accessToken, role } = res.data;
+        const { accessToken, role } = res.data; // ✅ storeId는 없음
 
         // 토큰 & 역할 저장
         localStorage.setItem("accessToken", accessToken);
-        if (role) {
-          localStorage.setItem("role", role);
-        }
+        if (role) localStorage.setItem("role", role);
 
         setMessage("로그인 성공!");
 
         if (role === "OWNER") {
-          navigate("/owner-dashboard"); // ✅ 사장님(관리자) 페이지
+          try {
+            // ✅ 사장님이면 /me 호출해서 storeId, storeName 가져오기
+            const meRes = await axios.get("https://gabom.shop/api/owners/me", {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+            const { storeName, storeId } = meRes.data;
+            if (storeName) localStorage.setItem("storeName", storeName);
+            if (storeId) localStorage.setItem("storeId", storeId);
+          } catch (meErr) {
+            console.error("❌ /api/owners/me 호출 실패:", meErr);
+          }
+
+          navigate("/owner"); // ✅ 사장님 페이지로 이동
         } else {
-          navigate("/main"); // ✅ 일반 유저 페이지
+          navigate("/main"); // ✅ 일반 유저 페이지로 이동
         }
       }
     } catch (err) {
