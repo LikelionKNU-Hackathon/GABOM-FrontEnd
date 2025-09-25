@@ -190,6 +190,12 @@ export default function OwnerPage() {
         ) : (
           <div className="empty-box">
             <p>데이터가 부족합니다.</p>
+            <button
+              onClick={() => fetchCompetition(true)}
+              className="refresh-btn"
+            >
+              <img src={refreshIcon} alt="새로고침" className="refresh-icon" />
+            </button>
           </div>
         )}
       </section>
@@ -227,6 +233,17 @@ export default function OwnerPage() {
         ) : (
           <div className="empty-box">
             <p>분석 데이터가 없습니다.</p>
+            <button
+              onClick={() => fetchSentiment(true)}
+              className="refresh-btn"
+            >
+              {" "}
+              <img
+                src={refreshIcon}
+                alt="새로고침"
+                className="refresh-icon"
+              />{" "}
+            </button>
           </div>
         )}
       </section>
