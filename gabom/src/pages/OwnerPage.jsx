@@ -45,6 +45,17 @@ export default function OwnerPage() {
     }
   }, [token]);
 
+  // ✅ 아이콘 회전 한번
+  const rotateIconOnce = (id) => {
+    const icon = document.getElementById(id);
+    if (!icon) return;
+
+    icon.classList.add("spin-once");
+    setTimeout(() => {
+      icon.classList.remove("spin-once");
+    }, 500);
+  };
+
   // 경쟁 분석
   const fetchCompetition = useCallback(
     async (refresh = false) => {
@@ -59,7 +70,15 @@ export default function OwnerPage() {
         );
         setCompetition(res.data);
       } catch (err) {
-        console.error("❌ 경쟁 분석 불러오기 실패:", err);
+        if (
+          err.response &&
+          err.response.status === 400 &&
+          err.response.data.includes("리뷰 데이터가 없습니다")
+        ) {
+          setCompetition(null);
+        } else {
+          console.error("❌ 경쟁 분석 불러오기 실패:", err);
+        }
       }
     },
     [storeId, token]
@@ -79,7 +98,15 @@ export default function OwnerPage() {
         );
         setSentiment(res.data);
       } catch (err) {
-        console.error("❌ 감정 분석 불러오기 실패:", err);
+        if (
+          err.response &&
+          err.response.status === 400 &&
+          err.response.data.includes("리뷰 데이터가 없습니다")
+        ) {
+          setSentiment(null);
+        } else {
+          console.error("❌ 감정 분석 불러오기 실패:", err);
+        }
       }
     },
     [storeId, token]
@@ -126,10 +153,18 @@ export default function OwnerPage() {
         <div className="section-header">
           <h2 className="section-title">경쟁 가게 분석</h2>
           <button
-            onClick={() => fetchCompetition(true)}
+            onClick={() => {
+              rotateIconOnce("refresh-competition");
+              fetchCompetition(true);
+            }}
             className="refresh-btn"
           >
-            <img src={refreshIcon} alt="새로고침" className="refresh-icon" />
+            <img
+              id="refresh-competition"
+              src={refreshIcon}
+              alt="새로고침"
+              className="refresh-icon"
+            />
           </button>
         </div>
         {competition ? (
@@ -190,12 +225,6 @@ export default function OwnerPage() {
         ) : (
           <div className="empty-box">
             <p>데이터가 부족합니다.</p>
-            <button
-              onClick={() => fetchCompetition(true)}
-              className="refresh-btn"
-            >
-              <img src={refreshIcon} alt="새로고침" className="refresh-icon" />
-            </button>
           </div>
         )}
       </section>
@@ -204,8 +233,19 @@ export default function OwnerPage() {
       <section className="analysis-section">
         <div className="section-header">
           <h2 className="section-title">리뷰 감정 분석</h2>
-          <button onClick={() => fetchSentiment(true)} className="refresh-btn">
-            <img src={refreshIcon} alt="새로고침" className="refresh-icon" />
+          <button
+            onClick={() => {
+              rotateIconOnce("refresh-sentiment");
+              fetchSentiment(true);
+            }}
+            className="refresh-btn"
+          >
+            <img
+              id="refresh-sentiment"
+              src={refreshIcon}
+              alt="새로고침"
+              className="refresh-icon"
+            />
           </button>
         </div>
         {sentiment ? (
@@ -233,17 +273,6 @@ export default function OwnerPage() {
         ) : (
           <div className="empty-box">
             <p>분석 데이터가 없습니다.</p>
-            <button
-              onClick={() => fetchSentiment(true)}
-              className="refresh-btn"
-            >
-              {" "}
-              <img
-                src={refreshIcon}
-                alt="새로고침"
-                className="refresh-icon"
-              />{" "}
-            </button>
           </div>
         )}
       </section>
