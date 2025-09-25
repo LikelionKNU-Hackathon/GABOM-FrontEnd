@@ -79,11 +79,12 @@ export default function OwnerPage() {
     }
   };
 
-  // 처음 진입 시
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchOwnerInfo();
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (storeId) {
       fetchCompetition();
