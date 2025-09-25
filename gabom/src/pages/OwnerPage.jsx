@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BackIcon from "../images/back.svg";
@@ -29,7 +29,7 @@ export default function OwnerPage() {
   const token = localStorage.getItem("accessToken");
 
   // ✅ 사장님 정보 불러오기
-  const fetchOwnerInfo = async () => {
+  const fetchOwnerInfo = useCallback(async () => {
     try {
       const res = await axios.get("https://gabom.shop/api/owners/me", {
         headers: { Authorization: `Bearer ${token}` },
@@ -43,54 +43,60 @@ export default function OwnerPage() {
     } catch (err) {
       console.error("❌ 사장님 정보 불러오기 실패:", err);
     }
-  };
+  }, [token]);
 
   // 경쟁 분석
-  const fetchCompetition = async (refresh = false) => {
-    if (!storeId) return;
-    try {
-      const res = await axios.get(
-        `https://gabom.shop/api/owners/${storeId}/analysis/competition`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: { refresh },
-        }
-      );
-      setCompetition(res.data);
-    } catch (err) {
-      console.error("❌ 경쟁 분석 불러오기 실패:", err);
-    }
-  };
+  const fetchCompetition = useCallback(
+    async (refresh = false) => {
+      if (!storeId) return;
+      try {
+        const res = await axios.get(
+          `https://gabom.shop/api/owners/${storeId}/analysis/competition`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { refresh },
+          }
+        );
+        setCompetition(res.data);
+      } catch (err) {
+        console.error("❌ 경쟁 분석 불러오기 실패:", err);
+      }
+    },
+    [storeId, token]
+  );
 
   // 감정 분석
-  const fetchSentiment = async (refresh = false) => {
-    if (!storeId) return;
-    try {
-      const res = await axios.get(
-        `https://gabom.shop/api/owners/${storeId}/analysis/sentiment`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: { refresh },
-        }
-      );
-      setSentiment(res.data);
-    } catch (err) {
-      console.error("❌ 감정 분석 불러오기 실패:", err);
-    }
-  };
+  const fetchSentiment = useCallback(
+    async (refresh = false) => {
+      if (!storeId) return;
+      try {
+        const res = await axios.get(
+          `https://gabom.shop/api/owners/${storeId}/analysis/sentiment`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { refresh },
+          }
+        );
+        setSentiment(res.data);
+      } catch (err) {
+        console.error("❌ 감정 분석 불러오기 실패:", err);
+      }
+    },
+    [storeId, token]
+  );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // 처음 진입 시 사장님 정보 불러오기
   useEffect(() => {
     fetchOwnerInfo();
-  }, []);
+  }, [fetchOwnerInfo]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // storeId 생기면 분석 불러오기
   useEffect(() => {
     if (storeId) {
       fetchCompetition();
       fetchSentiment();
     }
-  }, [storeId]);
+  }, [storeId, fetchCompetition, fetchSentiment]);
 
   const COLORS = ["#8884d8", "#ff6b6b"];
 
