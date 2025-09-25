@@ -50,6 +50,7 @@ export default function BottomSheet({ store }) {
   // ✅ 리뷰 조회
   const fetchReviews = async () => {
     if (!store || !store.id) return;
+
     try {
       const token = localStorage.getItem("accessToken");
       const res = await axios.get(
@@ -59,7 +60,7 @@ export default function BottomSheet({ store }) {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
       );
-      setReviews(res.data);
+      setReviews(res.data.reverse());
     } catch (err) {
       console.error("리뷰 불러오기 실패:", err);
     }
