@@ -20,6 +20,9 @@ import UserInfo from "./components/Mypage/UserInfo";
 import Title from "./components/Mypage/Title";
 import TitleList from "./components/Mypage/TitleList";
 
+import StampStore from "./components/Store/StampStore";
+import StampBarcode from "./components/Store/stampbarcode";
+
 function App() {
   return (
     <Router>
@@ -43,6 +46,11 @@ function App() {
         <Route path="/title" element={<Title />} />
         <Route path="/titlelist" element={<TitleList />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+        <Route path="/stampstore" element={<StampStore />} />
+        <Route path="/stampbarcode" element={<StampBarcode />} />
+
+
       </Routes>
     </Router>
   );
