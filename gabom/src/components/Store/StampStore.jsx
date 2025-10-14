@@ -124,7 +124,7 @@ export default function StampStore() {
               <p className={styles.exchangeConfirmationText}>
                 <span className={styles.highlightText}>스탬프 {selectedOption.stampNeeded}개</span>를
                 <br/>
-                <span className={styles.highlightText}>{selectedOption.reward}</span>로
+                <span className={styles.highlightText}>{selectedOption.reward}</span>으로
                 <br/>
                 교환하시겠습니까?
               </p>

@@ -4,10 +4,11 @@ import search from "../images/search.svg";
 import backIconPink from "../images/back_pink.svg";
 import chat from "../images/aichat.svg";
 import passport from "../images/stamp.svg";
-import camera from "../images/qrscan.svg";
+import camera from "../images/camera_b.svg";
 import rank from "../images/ranking.svg";
 import mypage from "../images/user.svg";
 import markerIcon from "../images/pinbig.png";
+import store from "../images/store.svg";
 import { Link, useNavigate } from "react-router-dom";
 import BottomSheet from "./BottomSheet";
 import axios from "axios";
@@ -188,7 +189,14 @@ function MainPage() {
             />
           </>
         )}
-      </div>
+        </div>
+        <div className="cameraButton" onClick={() => navigate("/camera")}>
+          <img
+            className="CameraIcon"
+            src={camera}
+            alt="카메라"
+          />
+        </div>
 
       {/* 상세보기 바텀시트 */}
       {selectedStore && (
@@ -203,26 +211,31 @@ function MainPage() {
         <div className="tabItem">
           <Link to="/aichat">
             <img className="ChatImage" src={chat} alt="채팅" />
+            <p className="tabText" >AI 챗봇 </p>
           </Link>
         </div>
         <div className="tabItem">
           <Link to="/PassPort">
             <img className="StampImage" src={passport} alt="스탬프" />
-          </Link>
-        </div>
-        <div className="tabItem">
-          <Link to="/camera">
-            <img className="CameraImage" src={camera} alt="카메라" />
+            <p className="tabText" >일지 </p>
           </Link>
         </div>
         <div className="tabItem">
           <Link to="/rank">
             <img className="RankImage" src={rank} alt="랭킹" />
+            <p className="tabText" >랭킹 </p>
+          </Link>
+        </div>
+        <div className="tabItem">
+          <Link to="/stampstore">
+            <img className="StoreImage" src={store} alt="스토어" />
+            <p className="tabText" >스토어 </p>
           </Link>
         </div>
         <div className="tabItem">
           <Link to="/Mypage">
             <img className="MyPageImage" src={mypage} alt="마이페이지" />
+            <p className="tabText" >마이페이지 </p>
           </Link>
         </div>
       </div>

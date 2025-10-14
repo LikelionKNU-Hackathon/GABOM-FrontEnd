@@ -55,6 +55,7 @@ body {
   right: 16px;
   top: calc(var(--safe-top) + 38px);
   height: 40px;
+  width: 338px;
 
   display: flex;
   align-items: center;
@@ -73,6 +74,7 @@ body {
   height: 24px;
 }
 
+
 .searchInput {
   flex: 1;
   height: 100%;
@@ -81,6 +83,34 @@ body {
   font-size: 16px;
   background: transparent;
 }
+
+.cameraButton {
+   position: absolute;
+  right: 16px;
+  top: calc(var(--safe-top) + 38px);
+  height: 40px;
+  width: 50px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 12px;
+
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 20; /* 맨 위 */
+  
+}
+
+.CameraIcon{
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+
+}
+
 
 /* ✅ 검색결과 리스트 제거됨
   .searchResults { ... }
@@ -168,7 +198,14 @@ body {
 .tabItem img {
   width: 30px;
   height: 30px;
+  margin-top: 8px;
+  margin-bottom: -5px;
 }
+
+.tabText {
+  font-weight: bold; 
+}
+
 
 a {
   display: flex;
