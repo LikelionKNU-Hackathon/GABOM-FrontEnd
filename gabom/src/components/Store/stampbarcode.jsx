@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import styles from "./stampbarcode.module.css";
 import backIcon from "../../assets/icon/back.svg"; 
-
 import image5000 from "../../assets/store/5000.png";
 // eslint-disable-next-line no-unused-vars
 import image10000 from "../../assets/store/10000.png";
