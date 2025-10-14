@@ -6,14 +6,15 @@
   margin: 0 auto;
   background-color: #fff;
   position: relative;
+  font-family: "Pretendard", sans-serif;
 }
 
+/* ---------------- 헤더 ---------------- */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 20px; 
-  border-bottom: none;
+  padding: 25px 20px;
   position: relative;
 }
 
@@ -24,12 +25,11 @@
 }
 
 .title {
-  font-size: 22px;
-  font-weight: bold;
   position: absolute;
-  text-align: center;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: bold;
   margin: 0;
   color: #000;
 }
@@ -40,18 +40,19 @@
   color: #d15878;
   border: none;
   border-radius: 15px;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   font-weight: 500;
 }
 
+/* ---------------- 현재 스탬프 ---------------- */
 .currentStampSection {
-  padding: 20px 20px 10px;
+  padding: 20px;
 }
 
 .userName {
   font-size: 15px;
-  color: #000000;
+  color: #000;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -66,20 +67,21 @@
 .stampCount {
   font-size: 40px;
   font-weight: bold;
-  color: #333;
+  color: #d15878;
 }
 
+/* ---------------- 안내문 ---------------- */
 .instruction {
-  font-size: 16px;
+  font-size: 15px;
   color: #333;
-  padding: 15px 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
   text-align: center;
+  font-weight: 500;
+  margin: 15px 0 20px;
 }
 
+/* ---------------- 교환 목록 ---------------- */
 .exchangeList {
-  padding: 0 20px;
+  padding: 0 20px 40px;
 }
 
 .exchangeItem {
@@ -87,11 +89,11 @@
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
-  border: 1px solid #fce8ee;
+  border: 1.5px solid #fcd5da;
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 .rewardInfo {
@@ -100,14 +102,14 @@
 }
 
 .stampNeeded {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #d15878;
   margin-bottom: 4px;
 }
 
 .reward {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
   color: #333;
 }
@@ -118,10 +120,14 @@
   color: #d15878;
   border: none;
   border-radius: 20px;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: 0.2s;
+}
+
+.exchangeBtn:hover:not(:disabled) {
+  background-color: #ffccd5;
 }
 
 .exchangeBtn:disabled {
@@ -130,31 +136,31 @@
   cursor: not-allowed;
 }
 
+/* ---------------- 모달 (Bottom Sheet) ---------------- */
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-end; /* ✅ 아래에서 위로 */
   z-index: 1000;
-  max-width: 500px;
-  margin: 0 auto;
 }
 
 .modalContent {
-  background-color: #fff;
   width: 100%;
-  max-height: 50%;
+  max-width: 500px;
+  background: #fff;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  padding: 20px;
+  padding: 25px 20px 30px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  align-items: center;
   animation: slideUp 0.3s ease-out;
 }
 
@@ -167,52 +173,44 @@
   }
 }
 
-.modalHeader {
-  text-align: center;
-  padding-bottom: 15px;
-}
-
 .modalTitle {
   font-size: 18px;
   font-weight: bold;
-  margin: 0;
-}
-
-.modalBody {
-  display: flex;
-  align-items: center;
-  padding: 30px 30px;
+  margin-bottom: 20px;
 }
 
 .giftCertImage {
-  width: 100px;
+  width: 120px;
   height: auto;
-  margin-right: 35px;
+  margin-bottom: 20px;
 }
 
 .exchangeConfirmationText {
-    flex-grow: 1;
-  font-size: 20px;
-  line-height: 1.5;
-  color: #333;
-  font-weight: 500;
   text-align: center;
+  font-size: 17px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 25px;
 }
 
 .highlightText {
-    font-weight: bold;
-    color: #d15878;
+  font-weight: bold;
+  color: #d15878;
 }
 
 .saveBtn {
   width: 100%;
   padding: 15px;
   background-color: #ffb1b4;
-  color: #ffffff;
+  color: #fff;
   border: none;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.saveBtn:hover {
+  background-color: #ff979d;
 }
