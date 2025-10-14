@@ -136,6 +136,8 @@ function MainPage() {
       {/* 지도 */}
       <div ref={mapRef} className="mapContainer" />
 
+    
+
       {/* 검색창 */}
       <div className="searchBar">
         {isSearching ? (
@@ -197,6 +199,7 @@ function MainPage() {
             alt="카메라"
           />
         </div>
+      
 
       {/* 상세보기 바텀시트 */}
       {selectedStore && (
