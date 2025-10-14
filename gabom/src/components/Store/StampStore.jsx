@@ -1,74 +1,134 @@
-// StampStore.jsx 파일
-
-import React, { useState } from "react";
+// ✅ StampStore.jsx (Netlify 빌드 완전 통과 버전)
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./StampStore.module.css"; 
+import axios from "axios";
+import styles from "./StampStore.module.css";
 
-import backIcon from "../../assets/icon/back.svg"; 
+import backIcon from "../../assets/icon/back.svg";
 import image5000 from "../../assets/store/5000.png";
 import image10000 from "../../assets/store/10000.png";
 import image30000 from "../../assets/store/30000.png";
 
 const exchangeOptions = [
-  { id: 1, stampNeeded: 50, reward: "온누리 상품권 5,000원", image: image5000, barcode: "198201152003" },
-  { id: 2, stampNeeded: 100, reward: "온누리 상품권 10,000원", image: image10000, barcode: "202403153541" },
-  { id: 3, stampNeeded: 250, reward: "온누리 상품권 30,000원", image: image30000, barcode: "202403153542" },
+  { id: 1, stampNeeded: 50, reward: "온누리 상품권 5,000원", image: image5000 },
+  {
+    id: 2,
+    stampNeeded: 100,
+    reward: "온누리 상품권 10,000원",
+    image: image10000,
+  },
+  {
+    id: 3,
+    stampNeeded: 250,
+    reward: "온누리 상품권 30,000원",
+    image: image30000,
+  },
 ];
 
 export default function StampStore() {
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
-  const [currentStampCount, setCurrentStampCount] = useState(250); 
-  
+  const [username, setUsername] = useState("");
+  const [currentStampCount, setCurrentStampCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
+  // ✅ 내 스탬프 조회
+  useEffect(() => {
+    const fetchStampInfo = async () => {
+      try {
+        // ✅ axios 인스턴스 생성 (내부에서 만들어서 ESLint 통과)
+        const api = axios.create({
+          baseURL: "https://gabom.shop/api",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const token = localStorage.getItem("accessToken");
+        if (token) api.defaults.headers.Authorization = `Bearer ${token}`;
+
+        const res = await api.get("/store");
+        setUsername(res.data.username);
+        setCurrentStampCount(res.data.availableStampCount);
+      } catch (err) {
+        console.error("❌ 스탬프 조회 실패:", err);
+        alert("스탬프 정보를 불러오지 못했습니다.");
+      }
+    };
+
+    fetchStampInfo();
+  }, []);
+
+  // ✅ 모달 열기
   const handleExchange = (option) => {
     setSelectedOption(option);
     setIsModalOpen(true);
   };
-  
-  const handleSaveExchange = () => {
+
+  // ✅ 교환하기
+  const handleSaveExchange = async () => {
     if (!selectedOption) return;
-    
-    setIsModalOpen(false);
-    
-    navigate('/stampbarcode', { 
-        state: {
-            rewardName: selectedOption.reward,
-            image: selectedOption.image,
-            barcodeText: selectedOption.barcode, 
+
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const res = await axios.post(
+        `https://gabom.shop/api/stamps/exchange?rewardId=${selectedOption.id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
+          },
         }
-    });
-    
-    setSelectedOption(null);
-  };
-  
-  const handleStorageClick = () => {
-      console.log("보관함 버튼 클릭: 추후 기능 구현 예정");
+      );
+
+      const data = res.data;
+      console.log("✅ 교환 응답:", data);
+
+      const rewardName =
+        data?.reward?.rewardName || selectedOption.reward || "교환 상품";
+      const stampNeeded =
+        data?.reward?.stampNeeded || selectedOption.stampNeeded || 0;
+      const barcode = data?.barcode || "000000000000";
+
+      setCurrentStampCount((prev) => prev - stampNeeded);
+
+      navigate("/stampbarcode", {
+        state: {
+          rewardName,
+          image: selectedOption.image,
+          barcodeText: barcode,
+        },
+      });
+
+      setIsModalOpen(false);
+      setSelectedOption(null);
+    } catch (err) {
+      console.error("❌ 스탬프 교환 실패:", err);
+      alert(err.response?.data?.message || "교환 중 오류가 발생했습니다.");
+    }
   };
 
   return (
     <div className={styles.container}>
-      
+      {/* ✅ 상단 헤더 */}
       <div className={styles.header}>
         <img
           src={backIcon}
           alt="뒤로가기"
           className={styles.backBtn}
-          onClick={() => navigate("/main")} 
+          onClick={() => navigate("/main")}
         />
         <h1 className={styles.title}>스토어</h1>
-        <button
-          className={styles.storageBtn}
-          onClick={handleStorageClick}
-        >
+        <button className={styles.storageBtn} disabled>
           보관함
         </button>
       </div>
 
+      {/* ✅ 스탬프 정보 */}
       <div className={styles.currentStampSection}>
-        <p className={styles.userName}>이가현 님의 현재 스탬프 개수</p> 
+        <p className={styles.userName}>
+          {username ? `${username} 님의 현재 스탬프 개수` : "불러오는 중..."}
+        </p>
         <div className={styles.stampCountBox}>
           <span className={styles.stampCount}>{currentStampCount}</span>
         </div>
@@ -78,15 +138,12 @@ export default function StampStore() {
         스탬프를 지역상품권으로 교환해보세요.
       </p>
 
+      {/* ✅ 교환 리스트 */}
       <div className={styles.exchangeList}>
         {exchangeOptions.map((option) => {
-          const isExchangable = currentStampCount >= option.stampNeeded; 
-          
+          const isExchangable = currentStampCount >= option.stampNeeded;
           return (
-            <div 
-                key={option.id} 
-                className={styles.exchangeItem}
-            >
+            <div key={option.id} className={styles.exchangeItem}>
               <div className={styles.rewardInfo}>
                 <span className={styles.stampNeeded}>
                   스탬프 {option.stampNeeded}개
@@ -96,7 +153,7 @@ export default function StampStore() {
               <button
                 className={styles.exchangeBtn}
                 onClick={() => handleExchange(option)}
-                disabled={!isExchangable} 
+                disabled={!isExchangable}
               >
                 교환하기
               </button>
@@ -104,36 +161,36 @@ export default function StampStore() {
           );
         })}
       </div>
-      
+
+      {/* ✅ 교환 모달 */}
       {isModalOpen && selectedOption && (
-        <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
-          <div 
-            className={styles.modalContent} 
-            onClick={(e) => e.stopPropagation()} 
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>스탬프 교환</h2>
-            </div>
-            
-            <div className={styles.modalBody}>
-              <img 
-                src={selectedOption.image} 
-                alt={`${selectedOption.reward} 상품권 이미지`} 
-                className={styles.giftCertImage} 
-              />
-              <p className={styles.exchangeConfirmationText}>
-                <span className={styles.highlightText}>스탬프 {selectedOption.stampNeeded}개</span>를
-                <br/>
-                <span className={styles.highlightText}>{selectedOption.reward}</span>으로
-                <br/>
-                교환하시겠습니까?
-              </p>
-            </div>
-            
-            <button 
-              className={styles.saveBtn} 
-              onClick={handleSaveExchange}
-            >
+            <h2 className={styles.modalTitle}>스탬프 교환</h2>
+            <img
+              src={selectedOption.image}
+              alt={selectedOption.reward}
+              className={styles.giftCertImage}
+            />
+            <p className={styles.exchangeConfirmationText}>
+              <span className={styles.highlightText}>
+                스탬프 {selectedOption.stampNeeded}개
+              </span>
+              를<br />
+              <span className={styles.highlightText}>
+                {selectedOption.reward}
+              </span>
+              으로
+              <br />
+              교환하시겠습니까?
+            </p>
+            <button className={styles.saveBtn} onClick={handleSaveExchange}>
               저장하기
             </button>
           </div>
