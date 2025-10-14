@@ -1,7 +1,7 @@
-// ✅ StampStore.jsx
+// ✅ StampStore.jsx (Netlify 빌드 완전 통과 버전)
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // ⚡ 일반 axios import
+import axios from "axios";
 import styles from "./StampStore.module.css";
 
 import backIcon from "../../assets/icon/back.svg";
@@ -32,67 +32,66 @@ export default function StampStore() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  // ✅ 공통 axios 설정
-  const api = axios.create({
-    baseURL: "https://gabom.shop/api", // ⚙️ 백엔드 주소
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  // ✅ 요청할 때 토큰 자동 포함
-  api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  });
-
-  // ✅ 1. 내 스탬프 조회
+  // ✅ 내 스탬프 조회
   useEffect(() => {
     const fetchStampInfo = async () => {
       try {
+        // ✅ axios 인스턴스 생성 (내부에서 만들어서 ESLint 통과)
+        const api = axios.create({
+          baseURL: "https://gabom.shop/api",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const token = localStorage.getItem("accessToken");
+        if (token) api.defaults.headers.Authorization = `Bearer ${token}`;
+
         const res = await api.get("/store");
         setUsername(res.data.username);
         setCurrentStampCount(res.data.availableStampCount);
       } catch (err) {
-        console.error("스탬프 조회 실패:", err);
+        console.error("❌ 스탬프 조회 실패:", err);
         alert("스탬프 정보를 불러오지 못했습니다.");
       }
     };
+
     fetchStampInfo();
   }, []);
 
-  // ✅ 2. 교환 버튼 클릭 → 모달 열기
+  // ✅ 모달 열기
   const handleExchange = (option) => {
     setSelectedOption(option);
     setIsModalOpen(true);
   };
 
-  // ✅ 3. 교환하기 API 요청
+  // ✅ 교환하기
   const handleSaveExchange = async () => {
     if (!selectedOption) return;
 
     try {
-      // ✅ 교환 요청
-      const res = await api.post(
-        `/stamps/exchange?rewardId=${selectedOption.id}`
+      const token = localStorage.getItem("accessToken");
+
+      const res = await axios.post(
+        `https://gabom.shop/api/stamps/exchange?rewardId=${selectedOption.id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
       );
 
-      // ✅ 서버 응답 구조 대비
       const data = res.data;
-      console.log("✅ 교환 응답:", data); // ← 실제 응답 구조 확인용
+      console.log("✅ 교환 응답:", data);
 
-      // reward 객체가 없을 수도 있으므로 optional chaining + fallback 사용
       const rewardName =
         data?.reward?.rewardName || selectedOption.reward || "교환 상품";
       const stampNeeded =
         data?.reward?.stampNeeded || selectedOption.stampNeeded || 0;
       const barcode = data?.barcode || "000000000000";
 
-      // ✅ 스탬프 차감 (fallback도 반영)
       setCurrentStampCount((prev) => prev - stampNeeded);
 
-      // ✅ 바코드 페이지 이동
       navigate("/stampbarcode", {
         state: {
           rewardName,
@@ -101,7 +100,6 @@ export default function StampStore() {
         },
       });
 
-      // ✅ 모달 닫기 및 상태 초기화
       setIsModalOpen(false);
       setSelectedOption(null);
     } catch (err) {
@@ -112,7 +110,7 @@ export default function StampStore() {
 
   return (
     <div className={styles.container}>
-      {/* 상단 헤더 */}
+      {/* ✅ 상단 헤더 */}
       <div className={styles.header}>
         <img
           src={backIcon}
@@ -126,7 +124,7 @@ export default function StampStore() {
         </button>
       </div>
 
-      {/* 현재 스탬프 */}
+      {/* ✅ 스탬프 정보 */}
       <div className={styles.currentStampSection}>
         <p className={styles.userName}>
           {username ? `${username} 님의 현재 스탬프 개수` : "불러오는 중..."}
@@ -140,7 +138,7 @@ export default function StampStore() {
         스탬프를 지역상품권으로 교환해보세요.
       </p>
 
-      {/* 교환 목록 */}
+      {/* ✅ 교환 리스트 */}
       <div className={styles.exchangeList}>
         {exchangeOptions.map((option) => {
           const isExchangable = currentStampCount >= option.stampNeeded;
@@ -164,7 +162,7 @@ export default function StampStore() {
         })}
       </div>
 
-      {/* 모달 */}
+      {/* ✅ 교환 모달 */}
       {isModalOpen && selectedOption && (
         <div
           className={styles.modalOverlay}
