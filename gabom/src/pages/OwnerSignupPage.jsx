@@ -7,41 +7,70 @@ import eye from "../images/fluenteye.png";
 import "./OwnerSignupPage.css";
 
 export default function OwnerSignupPage() {
-  const [storeId, setStoreId] = useState("");
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [businessNumber, setBusinessNumber] = useState("");
+  const [representativeName, setRepresentativeName] = useState("");
+  const [openDate, setOpenDate] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  // 🔴 백엔드 에러 메시지 상태
+  const [errorMsg, setErrorMsg] = useState("");
 
   const navigate = useNavigate();
   const handleBack = () => navigate("/");
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setErrorMsg(""); // 새 시도 시 기존 에러 초기화
 
-    if (!storeId.trim() || !loginId.trim() || !password || !email.trim()) {
-      return alert("모든 필드를 입력하세요.");
+    // 필수값 확인
+    if (
+      !loginId.trim() ||
+      !password.trim() ||
+      !email.trim() ||
+      !businessNumber.trim() ||
+      !representativeName.trim() ||
+      !openDate.trim()
+    ) {
+      setErrorMsg("⚠️ 모든 필드를 입력하세요.");
+      return;
     }
 
+    // 이메일 유효성 검사
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      return alert("이메일 형식을 확인해주세요.");
+      setErrorMsg("⚠️ 이메일 형식을 확인해주세요.");
+      return;
+    }
+
+    // 개업일자 유효성 검사
+    if (!/^\d{8}$/.test(openDate)) {
+      setErrorMsg("⚠️ 개업일자는 8자리 숫자(YYYYMMDD)로 입력해주세요.");
+      return;
     }
 
     try {
       const res = await axios.post("https://gabom.shop/api/owners/signup", {
-        storeId,
         loginId,
         password,
         email,
+        businessNumber,
+        representativeName,
+        openDate,
       });
 
       if (res.status === 200) {
-        alert("회원가입 성공! 로그인 페이지로 이동합니다.");
+        alert(res.data.message || "사업자 인증 및 회원가입이 완료되었습니다!");
         navigate("/");
       }
     } catch (err) {
-      console.error(err);
-      alert("회원가입 실패: " + (err?.response?.data?.message || "서버 오류"));
+      console.error("회원가입 실패:", err);
+      const backendMessage =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        "서버 오류가 발생했습니다.";
+      setErrorMsg("❌ " + backendMessage);
     }
   };
 
@@ -54,54 +83,10 @@ export default function OwnerSignupPage() {
           src={back}
           alt="뒤로"
         />
-        <h2 className="signuptext">회원가입</h2>
+        <h2 className="signuptext">사업자 회원가입</h2>
       </div>
 
       <form onSubmit={handleSignup}>
-        {/* 가게 선택 */}
-        <div className="box">
-          <p className="text">가게 선택</p>
-          <div className="inputWrapper">
-            <select
-              value={storeId}
-              onChange={(e) => setStoreId(e.target.value)}
-              required
-            >
-              <option value="">가게를 선택하세요</option>
-              <option value="1">The 진분식</option>
-              <option value="2">금화로 본식</option>
-              <option value="3">황보네 본식</option>
-              <option value="4">가온과의 방패연</option>
-              <option value="5">공세로 본식</option>
-              <option value="6">죽전로 본식</option>
-              <option value="7">라파즈</option>
-              <option value="8">다복식당</option>
-              <option value="9">친구포차</option>
-              <option value="10">지니업</option>
-              <option value="11">또우화</option>
-              <option value="12">어바웃유어유스</option>
-              <option value="13">설록궁 용인동백점</option>
-              <option value="14">토리코PC 강남대점</option>
-              <option value="15">히트코인노래연습장</option>
-              <option value="16">포가라 인도 요리전문점</option>
-              <option value="17">화화돈</option>
-              <option value="18">하노이별</option>
-              <option value="19">쏘앤</option>
-              <option value="20">레볼루션</option>
-              <option value="21">인앤피자</option>
-              <option value="22">청궁</option>
-              <option value="23">남경</option>
-              <option value="24">한상명품치킨</option>
-              <option value="25">카이장헤어 용인 강남대점</option>
-              <option value="26">위시앤조이 셀프빨래방 용인</option>
-              <option value="27">다이소 용인강남대점</option>
-              <option value="28">연궁</option>
-              <option value="29">건강한밥상</option>
-              <option value="30">감성춘천 한판</option>
-            </select>
-          </div>
-        </div>
-
         {/* 로그인 아이디 */}
         <div className="box">
           <p className="text">아이디</p>
@@ -149,6 +134,57 @@ export default function OwnerSignupPage() {
             />
           </div>
         </div>
+
+        {/* 사업자등록번호 */}
+        <div className="box">
+          <p className="text">사업자등록번호</p>
+          <div className="inputWrapper">
+            <input
+              type="text"
+              value={businessNumber}
+              onChange={(e) => setBusinessNumber(e.target.value)}
+              required
+              placeholder="숫자만 입력 (예: 1234567890)"
+              maxLength={10}
+            />
+          </div>
+        </div>
+
+        {/* 대표자명 */}
+        <div className="box">
+          <p className="text">대표자명</p>
+          <div className="inputWrapper">
+            <input
+              type="text"
+              value={representativeName}
+              onChange={(e) => setRepresentativeName(e.target.value)}
+              required
+              placeholder="대표자명을 입력하세요"
+            />
+          </div>
+        </div>
+
+        {/* 개업일자 */}
+        <div className="box">
+          <p className="text">개업일자</p>
+          <div className="inputWrapper">
+            <input
+              type="text"
+              value={openDate}
+              onChange={(e) => setOpenDate(e.target.value)}
+              required
+              placeholder="YYYYMMDD 형식 (예: 20220101)"
+              maxLength={8}
+            />
+          </div>
+        </div>
+
+        {/* 🔴 에러 메시지 표시 */}
+        {errorMsg && (
+          <p className="error-text" style={{ color: "red", marginTop: "10px" }}>
+            {errorMsg}
+          </p>
+        )}
 
         <button className="SignupButton2" type="submit">
           회원가입
