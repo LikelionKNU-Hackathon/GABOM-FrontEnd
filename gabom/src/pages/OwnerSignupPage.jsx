@@ -14,8 +14,6 @@ export default function OwnerSignupPage() {
   const [representativeName, setRepresentativeName] = useState("");
   const [openDate, setOpenDate] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  // 🔴 백엔드 에러 메시지 상태
   const [errorMsg, setErrorMsg] = useState("");
 
   const navigate = useNavigate();
@@ -66,14 +64,11 @@ export default function OwnerSignupPage() {
       }
     } catch (err) {
       console.error("회원가입 실패:", err);
-      const backendMessage =
-        err?.response?.data?.error ||
-        err?.response?.data?.message ||
-        "서버 오류가 발생했습니다.";
-      setErrorMsg("❌ " + backendMessage);
+      setErrorMsg("등록되지 않은 사업자입니다."); // 🔴 항상 이 문구만 표시
     }
   };
 
+  // ✅ 여기서 JSX 리턴해야 함
   return (
     <div className="SignupPageContainer">
       <div className="signupheader">
