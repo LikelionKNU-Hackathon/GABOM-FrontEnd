@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // 처음 로드 시 저장된 아이디 불러오기
+  // ✅ 저장된 아이디 불러오기
   useEffect(() => {
     const saved = localStorage.getItem("savedId");
     if (saved) {
@@ -21,73 +21,84 @@ export default function LoginPage() {
     }
   }, []);
 
-  // 체크박스/아이디 변경 시 로컬스토리지 동기화
+  // ✅ 로컬스토리지 아이디 저장
   useEffect(() => {
     if (saveId) localStorage.setItem("savedId", id);
     else localStorage.removeItem("savedId");
   }, [saveId, id]);
 
-  // 로그인 처리
+  // ✅ 로그인 처리
   const handleLogin = async (e) => {
     e.preventDefault();
     if (loading) return;
     setMessage("");
     setLoading(true);
 
+    console.log("📦 로그인 시도:", { loginId: id, password });
+
     try {
-      let res;
-      try {
-        // 일반 유저 로그인 시도
-        res = await axios.post(
-          "https://gabom.shop/api/users/login",
-          { loginId: id, password },
-          { withCredentials: true }
-        );
-      } catch (userErr) {
-        // 실패 시 사장님 로그인 시도
-        res = await axios.post(
-          "https://gabom.shop/api/owners/login",
-          { loginId: id, password },
-          { withCredentials: true }
-        );
+      // 1️⃣ 일반 유저 로그인 시도
+      const userRes = await axios.post(
+        "https://gabom.shop/api/users/login",
+        { loginId: id, password },
+        { withCredentials: true }
+      );
+
+      if (userRes.status === 200) {
+        handleLoginSuccess(userRes.data);
+        return;
       }
+    } catch (userErr) {
+      console.warn("유저 로그인 실패:", userErr?.response?.status);
+    }
 
-      if (res.status === 200) {
-        const { accessToken, role } = res.data; // ✅ storeId는 없음
+    try {
+      // 2️⃣ 사장님 로그인 시도
+      const ownerRes = await axios.post(
+        "https://gabom.shop/api/owners/login",
+        { loginId: id, password },
+        { withCredentials: true }
+      );
 
-        // 토큰 & 역할 저장
-        localStorage.setItem("accessToken", accessToken);
-        if (role) localStorage.setItem("role", role);
-
-        setMessage("로그인 성공!");
-
-        if (role === "OWNER") {
-          try {
-            // ✅ 사장님이면 /me 호출해서 storeId, storeName 가져오기
-            const meRes = await axios.get("https://gabom.shop/api/owners/me", {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            });
-
-            const { storeName, storeId } = meRes.data;
-            if (storeName) localStorage.setItem("storeName", storeName);
-            if (storeId) localStorage.setItem("storeId", storeId);
-          } catch (meErr) {
-            console.error("❌ /api/owners/me 호출 실패:", meErr);
-          }
-
-          navigate("/owner"); // ✅ 사장님 페이지로 이동
-        } else {
-          navigate("/main"); // ✅ 일반 유저 페이지로 이동
-        }
+      if (ownerRes.status === 200) {
+        handleLoginSuccess(ownerRes.data, true);
+        return;
       }
-    } catch (err) {
-      console.error(err);
+    } catch (ownerErr) {
+      console.error("사장님 로그인 실패:", ownerErr);
       const msg =
-        err?.response?.data?.message ||
+        ownerErr?.response?.data?.message ||
         "아이디 또는 비밀번호가 올바르지 않습니다.";
       setMessage(`로그인 실패: ${msg}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ✅ 로그인 성공 시 처리
+  const handleLoginSuccess = async (data, isOwner = false) => {
+    const { accessToken, role } = data;
+    localStorage.setItem("accessToken", accessToken);
+    if (role) localStorage.setItem("role", role);
+
+    setMessage("로그인 성공!");
+
+    if (isOwner || role === "OWNER") {
+      try {
+        const meRes = await axios.get("https://gabom.shop/api/owners/me", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        const { storeName, storeId } = meRes.data;
+        if (storeName) localStorage.setItem("storeName", storeName);
+        if (storeId) localStorage.setItem("storeId", storeId);
+      } catch (err) {
+        console.error("❌ /api/owners/me 호출 실패:", err);
+      }
+
+      navigate("/owner");
+    } else {
+      navigate("/main");
     }
   };
 
