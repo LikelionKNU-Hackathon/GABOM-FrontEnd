@@ -24,7 +24,7 @@ body {
   cursor: pointer;
 }
 
-.signuptext {
+.signuptext1 {
   margin: 30px 120px 23px 105px;
   font-size: 22px;
   font-weight: bold;
@@ -110,4 +110,62 @@ body {
 .inputWrapper select {
   max-height: 200px; /* 최대 높이 */
   overflow-y: auto; /* 스크롤 허용 */
+}
+
+/* ✅ 개인정보처리방침 모달 스타일 */
+.policy-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.policy-modal {
+  background: #fff;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  animation: fadeIn 0.3s ease;
+}
+
+.policy-content {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.policy-content h4 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #111;
+}
+
+.policy-content ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
