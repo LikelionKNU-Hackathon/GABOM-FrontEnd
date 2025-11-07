@@ -12,18 +12,19 @@ const API = {
 };
 
 export default function SignupPage() {
-  // ✅ 백엔드 User 엔티티 기준으로 상태 정리
-  // username: 이름, loginId: 로그인 아이디
   const [loginId, setLoginId] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
+  // ✅ 개인정보 동의 관련 상태
+  const [agree, setAgree] = useState(false);
+  const [showPolicy, setShowPolicy] = useState(false);
+
+  const navigate = useNavigate();
   const handleBack = () => navigate("/");
 
   // 공통 GET /check 호출자
@@ -35,7 +36,6 @@ export default function SignupPage() {
     );
   };
 
-  // 아이디(loginId) 중복 확인
   const checkLoginIdDuplicate = async () => {
     const value = loginId.trim();
     if (!value) return alert("아이디를 입력하세요.");
@@ -49,7 +49,6 @@ export default function SignupPage() {
     }
   };
 
-  // 닉네임 중복 확인
   const checkNicknameDuplicate = async () => {
     const value = nickname.trim();
     if (!value) return alert("닉네임을 입력하세요.");
@@ -77,7 +76,10 @@ export default function SignupPage() {
       return alert("모든 필드를 입력하세요.");
     }
 
-    // 간단한 이메일 형식 체크
+    if (!agree) {
+      return alert("개인정보 수집 및 이용에 동의해야 회원가입이 가능합니다.");
+    }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return alert("이메일 형식을 확인해주세요.");
     }
@@ -96,7 +98,6 @@ export default function SignupPage() {
         withCredentials: true,
       });
 
-      // ✅ 서버가 200 OK 주면 성공 처리
       alert(res.data?.message || "회원가입 성공! 로그인 페이지로 이동합니다.");
       navigate("/");
     } catch (err) {
@@ -125,9 +126,8 @@ export default function SignupPage() {
         <h2 className="signuptext">회원가입</h2>
       </div>
 
-      {/* ✅ form 제출로만 저장 시도 */}
       <form onSubmit={handleSignup}>
-        {/* 이름(username) */}
+        {/* 이름 */}
         <div className="box">
           <p className="text">이름</p>
           <div className="inputWrapper">
@@ -136,13 +136,12 @@ export default function SignupPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              autoComplete="name"
               placeholder="예) 홍길동"
             />
           </div>
         </div>
 
-        {/* 아이디(loginId) */}
+        {/* 아이디 */}
         <div className="box">
           <p className="text">아이디</p>
           <div className="inputWrapper">
@@ -151,7 +150,6 @@ export default function SignupPage() {
               value={loginId}
               onChange={(e) => setLoginId(e.target.value)}
               required
-              autoComplete="username"
               placeholder="로그인에 사용할 아이디"
             />
             <button
@@ -173,7 +171,6 @@ export default function SignupPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              autoComplete="new-password"
               placeholder="비밀번호를 입력하세요"
             />
             <img
@@ -194,7 +191,6 @@ export default function SignupPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              autoComplete="email"
               placeholder="example@email.com"
             />
           </div>
@@ -221,10 +217,115 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <button className="SignupButton2" type="submit" disabled={loading}>
+        {/* ✅ 개인정보 처리방침 동의 */}
+        <div className="agree-box">
+          <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />
+            <span>
+              개인정보 수집 및 이용에 동의합니다.{" "}
+              <button
+                type="button"
+                onClick={() => setShowPolicy(true)}
+                style={{
+                  color: "#007aff",
+                  textDecoration: "underline",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  fontSize: "14px",
+                }}
+              >
+                자세히 보기
+              </button>
+            </span>
+          </label>
+        </div>
+
+        <button
+          className="SignupButton2"
+          type="submit"
+          disabled={!agree || loading}
+          style={{
+            opacity: agree ? 1 : 0.5,
+            cursor: agree ? "pointer" : "not-allowed",
+          }}
+        >
           {loading ? "처리 중..." : "회원가입"}
         </button>
       </form>
+
+      {/* ✅ 개인정보처리방침 모달 */}
+      {showPolicy && (
+        <div className="policy-modal-overlay">
+          <div className="policy-modal">
+            <h3>개인정보 처리방침</h3>
+            <div className="policy-content">
+              <p>
+                (주)Gabom은 회원가입, 서비스 제공, 고객 문의 응대를 위해
+                최소한의 개인정보를 수집하며, 아래의 방침에 따라 안전하게
+                관리합니다.
+              </p>
+
+              <h4>1. 수집하는 개인정보 항목</h4>
+              <ul>
+                <li>필수 항목: 이름, 아이디, 비밀번호, 이메일, 닉네임</li>
+                <li>
+                  자동 수집 항목: 접속 로그, 쿠키, IP 주소, 서비스 이용기록
+                </li>
+              </ul>
+
+              <h4>2. 개인정보의 이용 목적</h4>
+              <ul>
+                <li>회원 식별 및 본인 인증</li>
+                <li>서비스 제공 및 고객 지원</li>
+                <li>부정이용 방지 및 법적 분쟁 대응</li>
+              </ul>
+
+              <h4>3. 개인정보의 보유 및 이용기간</h4>
+              <ul>
+                <li>회원 탈퇴 시 즉시 파기</li>
+                <li>단, 관련 법령에 따라 일정기간 보관될 수 있음</li>
+              </ul>
+
+              <h4>4. 개인정보의 제3자 제공</h4>
+              <p>원칙적으로 이용자의 동의 없이 제3자에게 제공하지 않습니다.</p>
+
+              <h4>5. 이용자의 권리</h4>
+              <p>
+                이용자는 언제든 자신의 개인정보를 열람, 수정, 삭제 요청할 수
+                있습니다.
+              </p>
+
+              <h4>6. 개인정보 보호책임자</h4>
+              <p>이름: 이현석 이메일: support@gabom.shop</p>
+
+              <p style={{ marginTop: "10px" }}>
+                본 방침은 2025년 11월 5일부터 시행됩니다.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowPolicy(false)}
+              style={{
+                marginTop: "20px",
+                padding: "8px 16px",
+                backgroundColor: "#007aff",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
